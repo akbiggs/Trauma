@@ -10,5 +10,13 @@ namespace Trauma.Engine
     /// </summary>
     public static class SoundManager
     {
+        /// <summary>
+        /// Load all sounds.
+        /// </summary>
+        /// <param name="Content">The content manager of the game.</param>
+        public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

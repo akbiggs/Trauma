@@ -11,5 +11,13 @@ namespace Trauma.Engine
     /// </summary>
     public static class TextureManager
     {
+        /// <summary>
+        /// Load all textures.
+        /// </summary>
+        /// <param name="Content">The content manager of the game.</param>
+        public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

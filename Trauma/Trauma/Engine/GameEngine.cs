@@ -8,6 +8,9 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Trauma.Rooms;
+using Trauma.Interface;
+using Trauma.Engine;
 
 namespace Trauma
 {
@@ -18,6 +21,12 @@ namespace Trauma
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        Room curRoom;
+        Song curSong;
+        TitleScreen titleScreen;
+        Intro intro;
+        GameState state;
 
         public GameEngine()
         {
@@ -47,7 +56,11 @@ namespace Trauma
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            // Load content from managers
+            TextureManager.LoadContent(Content);
+            SoundManager.LoadContent(Content)
+
+            // Initialize anything that depends on content from managers
         }
 
         /// <summary>
@@ -87,5 +100,13 @@ namespace Trauma
 
             base.Draw(gameTime);
         }
+    }
+
+    private enum GameState
+    {
+        Intro,
+        TitleScreen,
+        Room,
+        GameMenu
     }
 }
