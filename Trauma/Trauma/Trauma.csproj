@@ -72,11 +72,11 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine\AnimationSet.cs" />
     <Compile Include="Engine\BBox.cs" />
     <Compile Include="Engine\Camera.cs" />
     <Compile Include="Engine\InkMap.cs" />
-    <Compile Include="Engine\SoundManager.cs" />
-    <Compile Include="Engine\TextureManager.cs" />
+    <Compile Include="Engine\ResourceManager.cs" />
     <Compile Include="Interface\Dialogue.cs" />
     <Compile Include="Interface\GameMenu.cs" />
     <Compile Include="Interface\Intro.cs" />
@@ -105,6 +105,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\TiledLib\GS4\TiledLib\TiledLib [Windows].csproj">
+      <Project>{5C081229-C1AA-4D40-A307-9264F7509158}</Project>
+      <Name>TiledLib [Windows]</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TraumaContent\TraumaContent.contentproj">
       <Name>TraumaContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>

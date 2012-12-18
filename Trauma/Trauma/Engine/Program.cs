@@ -10,7 +10,7 @@ namespace Trauma
         /// </summary>
         static void Main(string[] args)
         {
-            using (GameEngine game = new GameEngine())
+            using (GameEngine game = new GameEngine(800, 640, true))
             {
                 game.Run();
             }

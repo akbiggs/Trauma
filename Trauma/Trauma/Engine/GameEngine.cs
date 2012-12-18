@@ -28,10 +28,20 @@ namespace Trauma
         Intro intro;
         GameState state;
 
-        public GameEngine()
+        public GameEngine(int width, int height, bool stretch)
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            graphics.PreferredBackBufferWidth = width;
+            graphics.PreferredBackBufferHeight = height;
+            graphics.PreferMultiSampling = false;
+            graphics.IsFullScreen = true;
+
+            if (stretch)
+            {
+                
+            }
         }
 
         /// <summary>
@@ -42,7 +52,7 @@ namespace Trauma
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            state = GameState.Intro;
 
             base.Initialize();
         }
@@ -57,10 +67,11 @@ namespace Trauma
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // Load content from managers
-            TextureManager.LoadContent(Content);
-            SoundManager.LoadContent(Content)
+            ResourceManager.LoadTextures(Content);
+            ResourceManager.LoadSounds(Content);
 
-            // Initialize anything that depends on content from managers
+            // Initialize anything that depends on loaded content
+            intro = new Intro();
         }
 
         /// <summary>
@@ -102,7 +113,7 @@ namespace Trauma
         }
     }
 
-    private enum GameState
+    enum GameState
     {
         Intro,
         TitleScreen,
