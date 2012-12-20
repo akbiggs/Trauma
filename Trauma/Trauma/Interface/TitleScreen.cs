@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Trauma.Engine;
 
 namespace Trauma.Interface
 {
@@ -9,7 +11,27 @@ namespace Trauma.Interface
     /// The title screen of the game.
     /// Might not end up getting used...we'll see.
     /// </summary>
-    public class TitleScreen
+    public class TitleScreen : IController
     {
+        private bool finished;
+        
+        public bool Finished
+        {
+            get { return finished; }
+        }
+
+        public void Finish()
+        {
+            finished = true;
+        }
+
+        public bool ExitSelected { get; set; }
+
+        public void Update(GameTime gameTime)
+        {
+            // TODO: Title screen.
+            Finish();
+        }
+
     }
 }

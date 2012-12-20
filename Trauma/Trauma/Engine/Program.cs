@@ -1,6 +1,4 @@
-using System;
-
-namespace Trauma
+namespace Trauma.Engine
 {
 #if WINDOWS || XBOX
     static class Program

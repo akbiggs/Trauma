@@ -10,5 +10,9 @@ namespace Trauma.Objects
     /// </summary>
     public class InkGenerator : GameObject
     {
+        public void Update()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

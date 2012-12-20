@@ -11,5 +11,9 @@ namespace Trauma.Objects
     /// </summary>
     public class InkBlob : GameObject
     {
+        public void Update()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

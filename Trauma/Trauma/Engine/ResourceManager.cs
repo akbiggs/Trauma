@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Content;
@@ -127,12 +125,12 @@ namespace Trauma.Engine
         const string ACCEPTANCE_DIR_NAME = "Acceptance";
 
         /* Map names. */
-        static List<String> introMapNames = new List<String>();
-        static List<String> denialMapNames = new List<String>();
-        static List<String> angerMapNames = new List<String>();
-        static List<String> bargainMapNames = new List<String>();
-        static List<String> depressionMapNames = new List<String>();
-        static List<String> acceptanceMapNames = new List<String>();
+        static readonly List<String> introMapNames = new List<String>();
+        static readonly List<String> denialMapNames = new List<String>();
+        static readonly List<String> angerMapNames = new List<String>();
+        static readonly List<String> bargainMapNames = new List<String>();
+        static readonly List<String> depressionMapNames = new List<String>();
+        static readonly List<String> acceptanceMapNames = new List<String>();
 
         /* Maps lists of map names to directory paths. */
         static Dictionary<String, List<String>> mapPathDic = new Dictionary<string, List<string>>

@@ -1,32 +1,42 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using Trauma.Rooms;
+using Trauma.Helpers;
 using Trauma.Interface;
-using Trauma.Engine;
+using Trauma.Rooms;
 
-namespace Trauma
+namespace Trauma.Engine
 {
     /// <summary>
     /// The main engine controlling all of the game's components.
     /// </summary>
     public class GameEngine : Microsoft.Xna.Framework.Game
     {
+        const float FADE_FACTOR = 0.5f;
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        /// <summary>
+        /// All of the rooms in the game, in order.
+        /// </summary>
+        List<String> roomNames = new List<String>();
+
+        Intro intro;
+        TitleScreen titleScreen;
+        GameMenu gameMenu;
         Room curRoom;
         Song curSong;
-        TitleScreen titleScreen;
-        Intro intro;
+        Credits credits;
         GameState state;
+
+        /// <summary>
+        /// The main component in charge of the game at the moment.
+        /// </summary>
+        IController controller;
 
         public GameEngine(int width, int height, bool stretch)
         {
@@ -36,12 +46,6 @@ namespace Trauma
             graphics.PreferredBackBufferWidth = width;
             graphics.PreferredBackBufferHeight = height;
             graphics.PreferMultiSampling = false;
-            graphics.IsFullScreen = true;
-
-            if (stretch)
-            {
-                
-            }
         }
 
         /// <summary>
@@ -70,8 +74,8 @@ namespace Trauma
             ResourceManager.LoadTextures(Content);
             ResourceManager.LoadSounds(Content);
 
-            // Initialize anything that depends on loaded content
-            intro = new Intro();
+            // Initialize anything depending on loaded content.
+            SetupState();
         }
 
         /// <summary>
@@ -92,11 +96,114 @@ namespace Trauma
         {
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
+                Exit();
 
-            // TODO: Add your update logic here
+            GameState oldState = state;
+            state = GetNextState();
+
+            // handle state transition
+            if (state != oldState)
+            {
+                if (state == GameState.Exit)
+                    Exit();
+                else
+                    SetupState();
+            }
+
+            controller.Update(gameTime);
 
             base.Update(gameTime);
+        }
+
+        /// <summary>
+        /// Set up the state of the game.
+        /// </summary>
+        private void SetupState()
+        {
+            switch (state)
+            {
+                case GameState.Intro:
+                    intro = new Intro();
+                    intro.Play();
+                    controller = intro;
+                    break;
+                case GameState.TitleScreen:
+                    titleScreen = new TitleScreen();
+                    controller = titleScreen;
+                    break;
+                case GameState.Room:
+                    curRoom = NextRoom();
+                    controller = curRoom;
+                    break;
+                case GameState.GameMenu:
+                    controller = gameMenu;
+                    break;
+                case GameState.Credits:
+                    controller = credits;
+                    break;
+                default:
+                    throw new InvalidOperationException("Can't setup this state.");
+            }
+        }
+
+        /// <summary>
+        /// Get the next room.
+        /// </summary>
+        /// <returns>The next room(level) of the game.</returns>
+        private Room NextRoom()
+        {
+            if (!MoreLevels())
+                throw new InvalidOperationException();
+            else
+                return new Room(ResourceManager.LoadMap(roomNames.Pop(), Content));
+        }
+
+        /// <summary>
+        /// Get the next state the game should be in.
+        /// </summary>
+        /// <returns>The next state of the game.</returns>
+        private GameState GetNextState()
+        {
+            switch (state)
+            {
+                case GameState.Intro:
+                    if (intro.Finished)
+                        return GameState.TitleScreen;
+                    break;
+
+                case GameState.TitleScreen:
+                    if (titleScreen.Finished)
+                        return titleScreen.ExitSelected ? GameState.Exit : GameState.Room;
+                    break;
+
+                case GameState.Room:
+                    if (curRoom.MenuRequested)
+                        return GameState.GameMenu;
+                    if (curRoom.Finished && !MoreLevels())
+                        return GameState.Credits;
+                    break;
+
+                case GameState.Credits:
+                    if (credits.Finished)
+                        return GameState.Exit;
+                    break;
+
+                case GameState.GameMenu:
+                    if (gameMenu.Finished)
+                        return GameState.Room;
+                    break;
+
+                case GameState.Exit:
+                    return GameState.Exit;
+
+                // if we've defaulted, the game is in an unknown/unimplemented state, so crash.
+                default:
+                    throw new InvalidOperationException();
+            }
+
+            // if one of the cases fell through without returning, return
+            // the current state of the game.
+            return state;
         }
 
         /// <summary>
@@ -111,6 +218,30 @@ namespace Trauma
 
             base.Draw(gameTime);
         }
+
+        /// <summary>
+        /// Fade out the given screen.
+        /// </summary>
+        /// <param name="color">The color to fade out with.</param>
+        /// <param name="speed">The speed to fade out at.</param>
+        public static void FadeOut(Color color, FadeSpeed speed)
+        {
+            // TODO: Fade out the screen to the given color.
+        }
+
+        public static void FadeIn(Color color, FadeSpeed speed)
+        {
+            // TODO: Fade in the screen to the given color.
+        }
+
+        /// <summary>
+        /// Whether or not there are any more levels remaining in the game.
+        /// </summary>
+        /// <returns></returns>
+        private bool MoreLevels()
+        {
+            return roomNames.Count > 0;
+        }
     }
 
     enum GameState
@@ -118,6 +249,15 @@ namespace Trauma
         Intro,
         TitleScreen,
         Room,
-        GameMenu
+        GameMenu,
+        Credits,
+        Exit
+    }
+
+    public enum FadeSpeed
+    {
+        Slow = 1,
+        Medium = 2,
+        Fast = 3
     }
 }

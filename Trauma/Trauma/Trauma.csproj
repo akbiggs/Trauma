@@ -75,8 +75,12 @@
     <Compile Include="Engine\AnimationSet.cs" />
     <Compile Include="Engine\BBox.cs" />
     <Compile Include="Engine\Camera.cs" />
+    <Compile Include="Engine\IController.cs" />
     <Compile Include="Engine\InkMap.cs" />
     <Compile Include="Engine\ResourceManager.cs" />
+    <Compile Include="Helpers\ListHelper.cs" />
+    <Compile Include="Helpers\MapHelper.cs" />
+    <Compile Include="Interface\Credits.cs" />
     <Compile Include="Interface\Dialogue.cs" />
     <Compile Include="Interface\GameMenu.cs" />
     <Compile Include="Interface\Intro.cs" />
@@ -141,9 +145,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

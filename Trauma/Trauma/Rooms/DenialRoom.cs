@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using TiledLib;
 
 namespace Trauma.Rooms
 {
@@ -11,5 +13,12 @@ namespace Trauma.Rooms
     /// </summary>
     public class DenialRoom : Room
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DenialRoom" /> class.
+        /// </summary>
+        /// <param name="map">The map this room is based off of.</param>
+        public DenialRoom(Color color, Map map) : base(color, map)
+        {
+        }
     }
 }
