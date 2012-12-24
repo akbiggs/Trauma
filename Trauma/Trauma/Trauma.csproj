@@ -77,9 +77,11 @@
     <Compile Include="Engine\Camera.cs" />
     <Compile Include="Engine\IController.cs" />
     <Compile Include="Engine\InkMap.cs" />
+    <Compile Include="Engine\Input.cs" />
     <Compile Include="Engine\ResourceManager.cs" />
     <Compile Include="Helpers\ListHelper.cs" />
     <Compile Include="Helpers\MapHelper.cs" />
+    <Compile Include="Helpers\VectorHelper.cs" />
     <Compile Include="Interface\Credits.cs" />
     <Compile Include="Interface\Dialogue.cs" />
     <Compile Include="Interface\GameMenu.cs" />

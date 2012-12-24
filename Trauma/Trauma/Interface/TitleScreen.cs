@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Trauma.Engine;
 
 namespace Trauma.Interface
@@ -14,7 +15,12 @@ namespace Trauma.Interface
     public class TitleScreen : IController
     {
         private bool finished;
-        
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Finished
         {
             get { return finished; }

@@ -35,13 +35,13 @@
     <Folder Include="Maps\Bargain\" />
     <Folder Include="Maps\Denial\" />
     <Folder Include="Maps\Depression\" />
-    <Folder Include="Maps\Intro\" />
     <Folder Include="Sounds\Effect\" />
     <Folder Include="Sounds\Music\" />
     <Folder Include="Textures\Blob\" />
     <Folder Include="Textures\Player\" />
     <Folder Include="Textures\Portal\" />
     <Folder Include="Textures\Splatter\" />
+    <Folder Include="Textures\Tileset\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Textures\Misc\Pixel.png">
@@ -49,6 +49,19 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Maps\Intro\1.tmx">
+      <Name>1</Name>
+      <Importer>TmxImporter</Importer>
+      <Processor>TmxProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\TiledLib\GS4\TiledPipelineExtensions\TiledPipelineExtensions.csproj">
+      <Project>{3AC723BC-8AE2-4ED8-ABE2-DA3532E87118}</Project>
+      <Name>TiledPipelineExtensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 

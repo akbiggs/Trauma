@@ -37,11 +37,11 @@ namespace Trauma.Engine
             this.width = width;
             this.frameDuration = frameDuration;
         }
-
+            
         /// <summary>
         /// Update the animation.
         /// </summary>
-        public void Update()
+        public void Update(GameTime gameTime)
         {
             animationTimer++;
             if (animationTimer > frameDuration)

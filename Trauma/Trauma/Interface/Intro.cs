@@ -39,6 +39,11 @@ namespace Trauma.Interface
             Finish();
         }
 
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual bool Finished
         {
             get { return finished; }

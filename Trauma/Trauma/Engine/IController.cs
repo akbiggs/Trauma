@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Trauma.Engine
 {
@@ -16,6 +17,12 @@ namespace Trauma.Engine
         /// </summary>
         /// <param name="gameTime">The game time.</param>
         void Update(GameTime gameTime);
+
+        /// <summary>
+        /// Draws the controller.
+        /// </summary>
+        /// <param name="spriteBatch">The sprite batch.</param>
+        void Draw(SpriteBatch spriteBatch);
 
         /// <summary>
         /// Whether or not the controller is finished with its role in the

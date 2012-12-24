@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="23" height="30" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="Test" tilewidth="32" tileheight="32">
+  <image source="../../Textures/Tileset/sketch1.jpg" width="800" height="601"/>
+  <tile id="50">
+   <properties>
+    <property name="Type" value="Solid"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Tiles" width="23" height="30">
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgYKQjNobiUbOpb7YxHjxSzR7FwxvjSzsjMV1R029DJdxo6cahVNYZ42APFvcNBkxL/wzmsBpKeYQcswEvAxR5
+  </data>
+ </layer>
+ <objectgroup name="Objects" width="23" height="30">
+  <object name="Player" x="32" y="23" width="35" height="35"/>
+ </objectgroup>
+</map>

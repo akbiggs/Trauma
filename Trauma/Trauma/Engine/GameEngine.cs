@@ -23,7 +23,10 @@ namespace Trauma.Engine
         /// <summary>
         /// All of the rooms in the game, in order.
         /// </summary>
-        List<String> roomNames = new List<String>();
+        List<String> roomNames = new List<String>
+            {
+                "Intro_1"
+            };
 
         Intro intro;
         TitleScreen titleScreen;
@@ -98,6 +101,8 @@ namespace Trauma.Engine
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 Exit();
 
+            Input.Update();
+
             GameState oldState = state;
             state = GetNextState();
 
@@ -154,8 +159,8 @@ namespace Trauma.Engine
         {
             if (!MoreLevels())
                 throw new InvalidOperationException();
-            else
-                return new Room(ResourceManager.LoadMap(roomNames.Pop(), Content));
+            
+            return new Room(Color.Black, ResourceManager.LoadMap(roomNames.Pop(), Content));
         }
 
         /// <summary>
@@ -214,7 +219,7 @@ namespace Trauma.Engine
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            controller.Draw(spriteBatch);
 
             base.Draw(gameTime);
         }

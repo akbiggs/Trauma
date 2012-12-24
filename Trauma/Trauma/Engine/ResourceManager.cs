@@ -29,14 +29,17 @@ namespace Trauma.Engine
         static Dictionary<String, Texture2D> texDic = new Dictionary<string,Texture2D>();
         
         /* All the textures, divided by category. */
-        static List<String> playerTexNames = new List<String>();
-        static List<String> portalTexNames = new List<String>();
-        static List<String> splatterTexNames = new List<String>();
-        static List<String> blobTexNames = new List<String>();
-        static List<String> miscTexNames = new List<String>();
+        static readonly List<String> playerTexNames = new List<String>();
+        static readonly List<String> portalTexNames = new List<String>();
+        static readonly List<String> splatterTexNames = new List<String>();
+        static readonly List<String> blobTexNames = new List<String>();
+        static readonly List<String> miscTexNames = new List<String>
+            {
+                "Pixel"
+            };
 
         /* Maps each path to a list of textures. */
-        static Dictionary<String, List<String>> texPathDic = new Dictionary<string, List<string>>
+        static readonly Dictionary<String, List<String>> texPathDic = new Dictionary<string, List<string>>
         {
             { PLAYER_DIR_NAME, playerTexNames },
             { PORTAL_DIR_NAME, portalTexNames },
@@ -80,10 +83,10 @@ namespace Trauma.Engine
 
         static Dictionary<String, Song> soundDic = new Dictionary<string, Song>();
 
-        static List<String> musicNames = new List<String>();
-        static List<String> effectNames = new List<String>();
+        static readonly List<String> musicNames = new List<String>();
+        static readonly List<String> effectNames = new List<String>();
 
-        static Dictionary<String, List<String>> soundPathDic = new Dictionary<string, List<string>> 
+        static readonly Dictionary<String, List<String>> soundPathDic = new Dictionary<string, List<string>> 
         {
             { MUSIC_DIR_NAME, musicNames },
             { EFFECT_DIR_NAME, effectNames }
@@ -156,7 +159,7 @@ namespace Trauma.Engine
         {
             string[] parts = name.Split(NAME_SEPARATOR);
             String path = String.Join(DIR_SEPARATOR.ToString(), parts);
-            return Content.Load<Map>(path);
+            return Content.Load<Map>(MAPS_DIR_NAME + DIR_SEPARATOR + path);
         }
         #endregion
     }

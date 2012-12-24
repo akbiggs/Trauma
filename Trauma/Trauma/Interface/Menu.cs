@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Graphics;
 using Trauma.Engine;
 using Microsoft.Xna.Framework;
 
@@ -13,6 +14,11 @@ namespace Trauma.Interface
     /// </summary>
     public class Menu : IController
     {
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual bool Finished
         {
             get { throw new NotImplementedException();  }
@@ -28,7 +34,7 @@ namespace Trauma.Interface
             throw new NotImplementedException();
         }
 
-        public void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
             throw new NotImplementedException();
         }

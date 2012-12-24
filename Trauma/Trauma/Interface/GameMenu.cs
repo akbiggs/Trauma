@@ -10,7 +10,7 @@ namespace Trauma.Interface
     /// </summary>
     public class GameMenu : Menu
     {
-        internal void Update(Microsoft.Xna.Framework.GameTime gameTime)
+        public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
         {
             throw new NotImplementedException();
         }

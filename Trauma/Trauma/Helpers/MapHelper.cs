@@ -8,14 +8,14 @@ namespace Trauma.Helpers
 {
     public static class MapHelper
     {
-        public static int WidthInTiles(this Map map)
+        public static int WidthInPixels(this Map map)
         {
-            return map.Width/map.TileWidth;
+            return map.Width * map.TileWidth;
         }
         
-        public static int HeightInTiles(this Map map)
+        public static int HeightInPixels(this Map map)
         {
-            return map.Height/map.TileHeight;
+            return map.Height * map.TileHeight;
         }
     }
 }
