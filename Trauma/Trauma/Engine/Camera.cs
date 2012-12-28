@@ -21,6 +21,7 @@ namespace Trauma.Engine
 
         private const float DEFAULT_ZOOM = 1.25f;
         private const float ZOOM_SPEED = 0.1f;
+        private const float MIN_ZOOM = 0.1f;
         #endregion
         #region Members
 
@@ -38,7 +39,7 @@ namespace Trauma.Engine
         /// <param name="target">The target to focus on.</param>
         public Camera(GameObject target)
         {
-            zoom = DEFAULT_ZOOM;
+            Zoom = DEFAULT_ZOOM;
             Rotation = 0.0f;
             Target = target;
         }
@@ -49,7 +50,7 @@ namespace Trauma.Engine
             set
             {
                 zoom = value;
-                if (zoom < 0.1f) zoom = 0.1f;
+                if (zoom < MIN_ZOOM) zoom = MIN_ZOOM;
             }
         }
 
@@ -58,19 +59,25 @@ namespace Trauma.Engine
             if (Target != null)
                 position = Target.Position;
 
+            // if we are still in the middle of zooming to a spot
             if (InZoomTransition())
-                zoom = MathHelper.Lerp(zoom, nextZoom, ZOOM_SPEED);
+            {
+                Zoom = nextZoom > Zoom ? Math.Min(Zoom + ZOOM_SPEED, nextZoom) : Math.Max(Zoom - ZOOM_SPEED, nextZoom);
+
+                // done zooming?
+                if (Zoom == nextZoom) nextZoom = 0;
+            }
 
             // TODO: Replace this with sections defining zoom levels.
-            if (Input.MouseLeftButtonTapped)
+            if (Input.MouseLeftButtonPressed)
                 ZoomTo(1f);
-            if (Input.MouseRightButtonTapped)
+            if (Input.MouseRightButtonDown)
                 ZoomTo(2f);
         }
 
         private bool InZoomTransition()
         {
-            return nextZoom != 0 && Math.Abs(Zoom - nextZoom) > 0.00001;
+            return nextZoom >= MIN_ZOOM;
         }
 
         public void Pan(Vector2 newPosition)
