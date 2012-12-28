@@ -38,7 +38,6 @@
     <Folder Include="Sounds\Effect\" />
     <Folder Include="Sounds\Music\" />
     <Folder Include="Textures\Blob\" />
-    <Folder Include="Textures\Player\" />
     <Folder Include="Textures\Portal\" />
     <Folder Include="Textures\Splatter\" />
     <Folder Include="Textures\Tileset\" />
@@ -55,6 +54,7 @@
       <Name>1</Name>
       <Importer>TmxImporter</Importer>
       <Processor>TmxProcessor</Processor>
+      <SubType>Designer</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +62,41 @@
       <Project>{3AC723BC-8AE2-4ED8-ABE2-DA3532E87118}</Project>
       <Name>TiledPipelineExtensions</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Player\Idle.png">
+      <Name>Idle</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Player\Idle_Splatter.png">
+      <Name>Idle_Splatter</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Maps\Intro\2.tmx">
+      <Name>2</Name>
+      <Importer>TmxImporter</Importer>
+      <Processor>TmxProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Background\Intro.png">
+      <Name>Intro</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Maps\Intro\3.tmx">
+      <Name>3</Name>
+      <Importer>TmxImporter</Importer>
+      <Processor>TmxProcessor</Processor>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 

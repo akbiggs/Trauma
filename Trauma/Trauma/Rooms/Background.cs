@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Trauma.Engine;
 
 namespace Trauma.Rooms
 {
@@ -26,6 +27,8 @@ namespace Trauma.Rooms
         /// <param name="spriteBatch">The sprite batch.</param>
         public void Draw(SpriteBatch spriteBatch)
         {
+            spriteBatch.Draw(ResourceManager.GetTexture("Background_Intro"), new Rectangle(0, 0, 40 * 40, 40 * 40), null, Color.Red, 0,
+                Vector2.Zero, SpriteEffects.None, 1);
         }
     }
 }

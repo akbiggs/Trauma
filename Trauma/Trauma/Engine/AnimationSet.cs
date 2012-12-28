@@ -15,11 +15,11 @@ namespace Trauma.Engine
         int animationTimer = 0;
         int animationFrame = 0;
 
-        String name;
+        public readonly String Name;
         Texture2D texture;
-        internal int frames;
+        public readonly int NumFrames;
         int width;
-        int frameDuration;
+        public readonly int FrameDuration;
 
         /// <summary>
         /// Make a new animation set.
@@ -31,11 +31,11 @@ namespace Trauma.Engine
         /// <param name="frameDuration">How long each frame should last for.</param>
         public AnimationSet(String name, Texture2D texture, int frames, int width, int frameDuration)
         {
-            this.name = name;
+            this.Name = name;
             this.texture = texture;
-            this.frames = frames;
+            this.NumFrames = frames;
             this.width = width;
-            this.frameDuration = frameDuration;
+            this.FrameDuration = frameDuration;
         }
             
         /// <summary>
@@ -44,15 +44,15 @@ namespace Trauma.Engine
         public void Update(GameTime gameTime)
         {
             animationTimer++;
-            if (animationTimer > frameDuration)
+            if (animationTimer > FrameDuration)
             {
                 animationTimer = 0;
                 animationFrame++;
-                if (animationFrame >= frames)
+                if (animationFrame >= NumFrames)
                     animationFrame = 0;
             }
 
-            if (animationFrame > frames)
+            if (animationFrame > NumFrames)
             {
                 animationFrame = 0;
             }
@@ -67,7 +67,7 @@ namespace Trauma.Engine
         /// <returns>True if they are the same name, false otherwise.</returns>
         public bool IsCalled(String name)
         {
-            return this.name == name;
+            return this.Name == name;
         }
 
         /// <summary>

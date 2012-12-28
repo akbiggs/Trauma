@@ -27,6 +27,12 @@ namespace Trauma.Rooms
 
         // used to find the layer in the map with all of the tiles
         private const string TILE_LAYER_NAME = "Tiles";
+
+        private const float DEFAULT_GRAVITY = 1f;
+
+        // limit the amount of blobs in the room (or maybe the section of the room) for
+        // sanity
+        private const int MAX_NUM_BLOBS = 200;
         #endregion
 
         #region Members
@@ -79,12 +85,13 @@ namespace Trauma.Rooms
         /// <param name="color">The color of the map.</param>
         /// <param name="map">The map this room is based on.</param>
         /// <param name="gravity">The gravity of the room.</param>
-        public Room(Color color, Map map, float gravity=1)
+        public Room(Color color, Map map, float gravity=DEFAULT_GRAVITY)
         {
-            this.background = new Background();
+            background = new Background();
             this.color = color;
-            this.Gravity = gravity;
+            Gravity = gravity;
             this.map = map;
+
             width = map.WidthInPixels();
             height = map.HeightInPixels();
             
@@ -98,7 +105,6 @@ namespace Trauma.Rooms
             for (int y = 0; y < map.Height; y++)
                 for (int x = 0; x < map.Width; x++)
                 {
-                    // the first tile is null for some reason.
                     TiledLib.Tile tile = grid[x, y];
                     tiles[y, x] = new Tile(new Vector2(x * tilesize.X, y * tilesize.Y), tilesize, tile);
                 }
@@ -120,7 +126,10 @@ namespace Trauma.Rooms
             foreach (GameObject obj in toAdd)
             {
                 if (obj is Player)
+                {
                     player = (Player) obj;
+                    camera = new Camera(player);
+                }
                 else if (obj is Portal)
                     portal = (Portal) obj;
                 else if (obj is InkGenerator)
@@ -185,6 +194,9 @@ namespace Trauma.Rooms
             //    generator.Update(this, gameTime);
             //foreach (InkBlob blob in blobs)
             //    blob.Update(this, gameTime);
+
+            // now that we've updated all the objects, update the camera.
+            camera.Update(this, gameTime);
         }
 
         /// <summary>
@@ -194,9 +206,16 @@ namespace Trauma.Rooms
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             // TODO: Use camera to modify where things are drawn.
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.BackToFront, 
+                BlendState.AlphaBlend,
+                null,
+                null,
+                null,
+                null,
+                camera.GetTransformation(spriteBatch.GraphicsDevice));
 
             background.Draw(spriteBatch);
+
             map.Draw(spriteBatch);
             //foreach (InkGenerator generator in generators)
             //    generator.Draw(spriteBatch);
@@ -255,7 +274,6 @@ namespace Trauma.Rooms
                 
             return new Vector2(boundX, boundY);
         }
-
 
         public virtual Vector2 GetMaxPosition(Vector2 position, Vector2 size)
         {
@@ -341,9 +359,14 @@ namespace Trauma.Rooms
             return position == Vector2.Clamp(position, Vector2.Zero, StageBounds);
         }
 
-        public void Splat(Vector2 position, Vector2 size, Color velocity1, Vector2 velocity)
+        public void Splat(Vector2 position, Vector2 size, Color splatColor, Vector2 velocity)
         {
             // TODO: Add a splat to the room.
+        }
+
+        public bool CanHaveMoreBlobs()
+        {
+            return blobs.Count < MAX_NUM_BLOBS;
         }
     }
 }

@@ -4,8 +4,8 @@ using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Trauma.Engine;
-using Trauma.Rooms;
 using Trauma.Helpers;
+using Trauma.Rooms;
 
 namespace Trauma.Objects
 {
@@ -16,25 +16,31 @@ namespace Trauma.Objects
     {
         #region Members
 
-        private readonly List<AnimationSet> animations;
-        protected Color color;
-        protected Vector2 position;
-        private float rotation;
-        
-        private Vector2 acceleration;
-        private BBox bbox;
+        protected readonly List<AnimationSet> animations;
+        private readonly Vector2 deceleration;
+        private readonly Vector2 maxSpeed;
 
-        private bool colorable;
-        private AnimationSet curAnimation;
-        private Vector2 deceleration;
-
-        private Vector2 maxPosition;
-        private Vector2 maxSpeed;
-        private Vector2 minPosition;
-        protected Vector2 size;
+        private readonly float rotation;
         protected Vector2 Velocity;
 
+        private Vector2 acceleration;
+        private BBox bbox;
+        protected Color color;
+
+        private bool colorable;
+        protected virtual AnimationSet curAnimation { get; set; }
         private bool hasMoved;
+
+        private Vector2 maxPosition;
+        private Vector2 minPosition;
+        protected Vector2 position;
+        protected Vector2 size;
+
+        public Vector2 Position
+        {
+            get { return position; }
+        }
+
         #endregion
 
         /// <summary>
@@ -111,7 +117,7 @@ namespace Trauma.Objects
         }
 
         /// <summary>
-        /// Moves in the specified direction.
+        ///     Moves in the specified direction.
         /// </summary>
         /// <param name="room">The room that this object is moving around in.</param>
         /// <param name="direction">The direction to move in.</param>
@@ -135,25 +141,23 @@ namespace Trauma.Objects
         }
 
         /// <summary>
-        /// Collides with a wall.
+        ///     Collides with a wall.
         /// </summary>
         /// <param name="room">The room containing the wall.</param>
         public virtual void CollideWithWall(Room room)
         {
-            
         }
 
         /// <summary>
-        /// Collides with the ground. Should be called alongside CollideWithWall.
+        ///     Collides with the ground. Should be called alongside CollideWithWall.
         /// </summary>
         /// <param name="room">The room containing the ground.</param>
         public virtual void CollideWithGround(Room room)
         {
-            
         }
 
         /// <summary>
-        /// Applies gravity to the object.
+        ///     Applies gravity to the object.
         /// </summary>
         /// <param name="room">The room that the object is in.</param>
         private void ApplyGravity(Room room)
@@ -162,7 +166,7 @@ namespace Trauma.Objects
         }
 
         /// <summary>
-        /// Changes the object's velocity towards the specified direction.
+        ///     Changes the object's velocity towards the specified direction.
         /// </summary>
         /// <param name="direction">The direction to move.</param>
         private void Accelerate(Vector2 direction)
@@ -202,7 +206,7 @@ namespace Trauma.Objects
                 CollideWithWall(room);
                 CollideWithGround(room);
             }
-                
+
             position.Y = MathHelper.Clamp(position.Y + Velocity.Y, minPosition.Y, maxPosition.Y);
         }
 
@@ -212,8 +216,7 @@ namespace Trauma.Objects
         /// <param name="spriteBatch">The sprite batch of the game.</param>
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            Texture2D frame = curAnimation.GetTexture();
-            spriteBatch.Draw(frame, new Rectangle((int) position.X, (int) position.Y, (int) size.X, (int) size.Y), null,
+            spriteBatch.Draw(curAnimation.GetTexture(), new Rectangle((int) position.X, (int) position.Y, (int) size.X, (int) size.Y), curAnimation.GetFrameRect(),
                              color, rotation, Vector2.Zero, SpriteEffects.None, 0);
         }
 
@@ -234,6 +237,5 @@ namespace Trauma.Objects
         {
             return animations.Find(animset => animset.IsCalled(name));
         }
-
     }
 }

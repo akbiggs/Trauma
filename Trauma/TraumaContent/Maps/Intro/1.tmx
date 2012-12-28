@@ -2,15 +2,18 @@
 <map version="1.0" orientation="orthogonal" width="23" height="30" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="Test" tilewidth="32" tileheight="32">
   <image source="../../Textures/Tileset/sketch1.jpg" width="800" height="601"/>
-  <tile id="50">
+  <tile id="1">
    <properties>
     <property name="Type" value="Solid"/>
    </properties>
   </tile>
  </tileset>
+ <tileset firstgid="451" name="Stuff" tilewidth="98" tileheight="98">
+  <image source="../../../../../../Dropbox/GMD -Trauma/pf-horizontal.png" width="500" height="100"/>
+ </tileset>
  <layer name="Tiles" width="23" height="30">
   <data encoding="base64" compression="zlib">
-   eJxjZGBgYKQjNobiUbOpb7YxHjxSzR7FwxvjSzsjMV1R029DJdxo6cahVNYZ42APFvcNBkxL/wzmsBpKeYQcswEvAxR5
+   eJybysjAMHUUj2ICeBSMglFAHhjovDuKR/EoHsXDGQMA/gIbEg==
   </data>
  </layer>
  <objectgroup name="Objects" width="23" height="30">

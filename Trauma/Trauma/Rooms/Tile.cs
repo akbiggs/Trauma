@@ -37,7 +37,7 @@ namespace Trauma.Rooms
 
             // get the tile type from its properties in the map
             Property tiletype;
-            if (!tile.Properties.TryGetValue(TYPE_PROPERTY_NAME, out tiletype))
+            if (tile == null || !tile.Properties.TryGetValue(TYPE_PROPERTY_NAME, out tiletype))
                 // TODO: Make this throw an error when we have the actual tileset.
                 type = TileType.Transparent;
             else

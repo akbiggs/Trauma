@@ -24,15 +24,25 @@ namespace Trauma.Engine
         const string PORTAL_DIR_NAME = "Portal";
         const string BLOB_DIR_NAME = "Blob";
         const string SPLATTER_DIR_NAME = "Splatter";
+        const string BACKGROUND_DIR_NAME = "Background";
         const string MISC_DIR_NAME = "Misc";
 
         static Dictionary<String, Texture2D> texDic = new Dictionary<string,Texture2D>();
         
         /* All the textures, divided by category. */
-        static readonly List<String> playerTexNames = new List<String>();
+
+        private static readonly List<String> playerTexNames = new List<String>
+            {
+                "Idle",
+                "Idle_Splatter"
+            };
         static readonly List<String> portalTexNames = new List<String>();
         static readonly List<String> splatterTexNames = new List<String>();
         static readonly List<String> blobTexNames = new List<String>();
+        static readonly List<String> backgroundTexNames = new List<string>
+            {
+                "Intro"
+            }; 
         static readonly List<String> miscTexNames = new List<String>
             {
                 "Pixel"
@@ -45,6 +55,7 @@ namespace Trauma.Engine
             { PORTAL_DIR_NAME, portalTexNames },
             { SPLATTER_DIR_NAME, splatterTexNames },
             { BLOB_DIR_NAME, blobTexNames },
+            { BACKGROUND_DIR_NAME, backgroundTexNames },
             { MISC_DIR_NAME, miscTexNames }
         };
 

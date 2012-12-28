@@ -25,7 +25,7 @@ namespace Trauma.Engine
         /// </summary>
         List<String> roomNames = new List<String>
             {
-                "Intro_1"
+                "Intro_3"
             };
 
         Intro intro;
@@ -217,7 +217,7 @@ namespace Trauma.Engine
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             controller.Draw(spriteBatch);
 

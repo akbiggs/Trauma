@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="20" height="20" tilewidth="100" tileheight="100">
+ <tileset firstgid="1" name="Test" tilewidth="100" tileheight="100">
+  <image source="../../../../../../Dropbox/GMD -Trauma/pf-horizontal.png" width="500" height="100"/>
+  <tile id="1">
+   <properties>
+    <property name="Type" value="Solid"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="Type" value="Solid"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="Type" value="Solid"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Tiles" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYKANYARiJiBmJoBZgJiVhvajm4/sLkJ24zKDkHpamE2JGcTEBa3iYRSMglEwfAEA6Y4AlA==
+  </data>
+ </layer>
+ <objectgroup name="Objects" width="20" height="20">
+  <object name="Player" x="190" y="224" width="37" height="50"/>
+  <object name="ZoomSection" x="400" y="200" width="300" height="400"/>
+ </objectgroup>
+</map>

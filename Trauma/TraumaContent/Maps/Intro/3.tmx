@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="40" height="40" tilewidth="50" tileheight="50">
+ <tileset firstgid="1" name="Test" tilewidth="50" tileheight="50">
+  <image source="../../Textures/Tileset/pf-horizontal.png" width="500" height="100"/>
+  <tile id="2">
+   <properties>
+    <property name="Type" value="Solid"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="Type" value="Solid"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="Type" value="Solid"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="Type" value="Solid"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="Type" value="Solid"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="Type" value="Solid"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Tiles" width="40" height="40">
+  <data encoding="base64" compression="zlib">
+   eJzt1LkOgCAQRVHc993//1ZfYyExoRIR70luaKicQWOA96QqU7kqVKkqVatGtZ7v2Ho1qFFNalaLWtWmds93YhDSzO+ENPO/SMx1Vq536VtnrrN64l3au3ruq+v09a3sXT331XXG+A8DAAAAAADfcQCiTQg9
+  </data>
+ </layer>
+ <objectgroup name="Objects" width="40" height="40">
+  <object name="Player" x="139" y="87" width="48" height="63"/>
+ </objectgroup>
+</map>
