@@ -37,11 +37,12 @@ namespace Trauma.Engine
                 "Idle_Splatter"
             };
         static readonly List<String> portalTexNames = new List<String>();
-        static readonly List<String> splatterTexNames = new List<String>
+
+        private static readonly List<String> splatterTexNames = new List<String>
             {
                 "1",
                 "2"
-            }
+            };
         static readonly List<String> blobTexNames = new List<String>();
         static readonly List<String> backgroundTexNames = new List<string>
             {
@@ -94,7 +95,7 @@ namespace Trauma.Engine
         {
             Random random = new Random();
             int splatterIndex = random.Next(splatterTexNames.Count);
-            return GetTexture(splatterTexNames[splatterIndex]);
+            return GetTexture(SPLATTER_DIR_NAME + NAME_SEPARATOR + splatterTexNames[splatterIndex]);
         }
 
         #endregion

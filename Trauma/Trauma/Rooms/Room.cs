@@ -30,6 +30,9 @@ namespace Trauma.Rooms
 
         private const float DEFAULT_GRAVITY = 1f;
 
+        // can be used to determine splatter proportions based on object speed
+        private const float SPLATTER_SIZE_FACTOR = 0.1f;
+
         // limit the amount of blobs in the room (or maybe the section of the room) for
         // sanity
         private const int MAX_NUM_BLOBS = 200;
@@ -91,6 +94,7 @@ namespace Trauma.Rooms
             this.color = color;
             Gravity = gravity;
             this.map = map;
+            this.inkMap = new InkMap();
 
             width = map.WidthInPixels();
             height = map.HeightInPixels();
@@ -197,6 +201,7 @@ namespace Trauma.Rooms
 
             // now that we've updated all the objects, update the camera.
             camera.Update(this, gameTime);
+            inkMap.Update();
         }
 
         /// <summary>
@@ -205,7 +210,6 @@ namespace Trauma.Rooms
         /// <param name="spriteBatch">The sprite batch.</param>
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            // TODO: Use camera to modify where things are drawn.
             spriteBatch.Begin(SpriteSortMode.BackToFront, 
                 BlendState.AlphaBlend,
                 null,
@@ -217,6 +221,7 @@ namespace Trauma.Rooms
             background.Draw(spriteBatch);
 
             map.Draw(spriteBatch);
+            inkMap.Draw(spriteBatch);
             //foreach (InkGenerator generator in generators)
             //    generator.Draw(spriteBatch);
             //portal.Draw(spriteBatch);
@@ -361,7 +366,22 @@ namespace Trauma.Rooms
 
         public void Splat(Vector2 position, Vector2 size, Color splatColor, Vector2 velocity)
         {
-            // TODO: Add a splat to the room.
+            float rotation = velocity.ToAngle();
+
+            // figure out how big the splatter should be
+            Vector2 splatSize;
+            
+            // if the velocity along any axis is zero or negative, we'll get weird size values
+            // back.
+            if (Math.Abs(velocity.X) > 0)
+                splatSize.X = size.X*Math.Abs(velocity.X)*SPLATTER_SIZE_FACTOR;
+            else splatSize.X = size.X*SPLATTER_SIZE_FACTOR;
+
+            if (Math.Abs(velocity.Y) > 0)
+                splatSize.Y = size.Y*Math.Abs(velocity.Y)*SPLATTER_SIZE_FACTOR;
+            else splatSize.Y = size.Y*SPLATTER_SIZE_FACTOR;
+
+            inkMap.AddSplatter(position, splatSize, rotation, ResourceManager.GetRandomSplatter(), splatColor);
         }
 
         public bool CanHaveMoreBlobs()

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Timers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -17,13 +19,20 @@ namespace Trauma.Objects
 
         private const string SPLATTER_TAG = "Splatter";
 
+        private const float SPLATTER_IGNORE = 9f;
+        private const float SPLAT_INTERVAL = 5f;
+        private const float NEGLIGIBLE_SPLATTER_VELOCITY = 0.1f;
+
+        private const float JUMP_SPLATTER_SIZE = 40f;
+        private const float SLIDE_SPLATTER_SIZE = 30f;
+
         private const int SPLATTER_OFFSET_X = 17;
         private const int SPLATTER_OFFSET_Y = 4;
         private const float SPLATTER_RESIZE_X = 1.82f;
         private const float SPLATTER_RESIZE_Y = 1.36f;
 
         private const float MAX_SPEED_X = 8f;
-        private const float MAX_SPEED_Y = 20f;
+        private const float MAX_SPEED_Y = 30f;
         private const float JUMP_SPEED = 20f;
         private const float WALL_SLIDE_FACTOR = 4f;
 
@@ -50,6 +59,9 @@ namespace Trauma.Objects
         private bool canJump = true;
         private AnimationSet splatterAnimation;
 
+        private bool canSplat = true;
+        private Timer splatTimer;
+
         protected override AnimationSet curAnimation
         {
             set
@@ -73,7 +85,7 @@ namespace Trauma.Objects
         public Player(Vector2 pos) :
             base(pos, Vector2.Zero, new Vector2(MAX_SPEED_X, MAX_SPEED_Y),
                  new Vector2(ACCELERATION_X, ACCELERATION_Y), new Vector2(DECCELERATION_X, DECCLERATION_Y),
-                 Color.Red, true, new Vector2(WIDTH, HEIGHT),
+                 Color.Blue, true, new Vector2(WIDTH, HEIGHT),
                  new List<AnimationSet>
                      {
                          // TODO: Replace this with actual animations.
@@ -85,12 +97,16 @@ namespace Trauma.Objects
             jump = Keys.W;
             left = Keys.A;
             right = Keys.D;
+
+            splatTimer = new Timer {AutoReset = true, Interval = SPLAT_INTERVAL};
+            splatTimer.Elapsed += (sender, args) => canSplat = true;
+            splatTimer.Start();
         }
 
         public override void Update(Room room, GameTime gameTime)
         {
             if (canJump && Input.KeyboardTapped(jump))
-                DoJump();
+                DoJump(room);
 
             if (Input.IsKeyDown(left))
                 Move(room, new Vector2(-1, 0));
@@ -110,8 +126,30 @@ namespace Trauma.Objects
                 Velocity = Velocity.PushBack(new Vector2(0, Velocity.Y/WALL_SLIDE_FACTOR));
                 // TODO: Maybe add in some kind of wall-sliding animation here?
                 canJump = true;
+
+                float splatX = Velocity.X > 0 ? position.X + size.X : position.X;
+                float splatY = position.Y + size.Y;
+                room.Splat(new Vector2(splatX, splatY), Vector2.One * SLIDE_SPLATTER_SIZE, 
+                    color, Velocity);
             }
-            room.Splat(position, size, color, Velocity);
+            if (Velocity.LengthSquared() > Math.Pow(SPLATTER_IGNORE, 2))
+            {
+                // figure out where the splatter should be positioned
+                Vector2 splatPosition = position;
+                if (Velocity.X > 0)
+                    splatPosition.X = position.X + size.X;
+                if (Velocity.Y > 0)
+                    splatPosition.Y = position.Y + size.Y;
+
+                if (canSplat)
+                {
+                    room.Splat(splatPosition, size, color,
+                               new Vector2(Math.Abs(Velocity.X) > NEGLIGIBLE_SPLATTER_VELOCITY ? Velocity.X : 0,
+                                           Math.Abs(Velocity.Y) > NEGLIGIBLE_SPLATTER_VELOCITY ? Velocity.Y : 0));
+                    canSplat = false;
+                    splatTimer.Start();
+                }
+            }
         }
 
         public override void CollideWithGround(Room room)
@@ -123,12 +161,12 @@ namespace Trauma.Objects
         /// <summary>
         ///     Jumps the player.
         /// </summary>
-        private void DoJump()
+        private void DoJump(Room room)
         {
             Velocity.Y = -JUMP_SPEED;
             canJump = false;
+            room.Splat(position, Vector2.One * JUMP_SPLATTER_SIZE, color, Velocity);
         }
-
 
         /// <summary>
         ///     Lands the player.

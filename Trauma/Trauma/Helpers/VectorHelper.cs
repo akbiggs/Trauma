@@ -25,5 +25,20 @@ namespace Trauma.Helpers
 
             return new Vector2(newXComponent, newYComponent);
         }
+
+        /// <summary>
+        /// Create a vector from the given angle.
+        /// </summary>
+        /// <param name="vector">The vector to create.</param>
+        /// <param name="angle">The angle to create it from.</param>
+        public static Vector2 VectorFromAngle(float angle)
+        {
+            return new Vector2((float)Math.Sin(angle), -(float)Math.Cos(angle));
+        }
+
+        public static float ToAngle(this Vector2 vector)
+        {
+            return (float) Math.Atan2(vector.X, -vector.Y);
+        }
     }
 }

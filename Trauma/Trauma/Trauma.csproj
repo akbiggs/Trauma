@@ -94,6 +94,7 @@
     <Compile Include="Engine\ResourceManager.cs" />
     <Compile Include="Helpers\ListHelper.cs" />
     <Compile Include="Helpers\MapHelper.cs" />
+    <Compile Include="Helpers\TextureHelper.cs" />
     <Compile Include="Helpers\VectorHelper.cs" />
     <Compile Include="Interface\Credits.cs" />
     <Compile Include="Interface\Dialogue.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Objects\InkGenerator.cs" />
     <Compile Include="Objects\Player.cs" />
     <Compile Include="Objects\Portal.cs" />
+    <Compile Include="Objects\Splatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Engine\Program.cs" />
     <Compile Include="Engine\GameEngine.cs" />

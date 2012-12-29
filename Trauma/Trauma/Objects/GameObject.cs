@@ -70,6 +70,7 @@ namespace Trauma.Objects
             this.deceleration = deceleration;
             this.color = color;
             this.colorable = colorable;
+            Debug.Assert(size.X > 0 && size.Y > 0, "Invalid object size.");
             this.size = size;
 
             this.animations = animations;
