@@ -37,6 +37,7 @@ namespace Trauma.Engine
                 "Idle",
                 "Idle_Splatter",
                 "Main",
+                "Main_Splatter",
                 "Walk",
                 "Jump",
                 "Land"

@@ -20,7 +20,7 @@ namespace Trauma.Objects
         private const int LEFT = -1;
         private const int RIGHT = 1;
 
-        private const string SPLATTER_TAG = "Splatter";
+        private const string SPLATTER_TAG = "_Splatter";
 
         private const float SPLATTER_IGNORE = 10f;
         private const float SPLAT_INTERVAL = 5f;
@@ -51,11 +51,11 @@ namespace Trauma.Objects
         private const float DECCELERATION_X = 3.0f;
         private const float DECCLERATION_Y = 0f;
 
-        private const int IDLE_FRAME_WIDTH = 167;
-        private const int WALK_FRAME_WIDTH = 167;
-        private const int JUMP_FRAME_WIDTH = 167;
-        private const int SLIDE_FRAME_WIDTH = 167;
-        private const int LAND_FRAME_WIDTH = 167;
+        private const int IDLE_FRAME_WIDTH = 100;
+        private const int WALK_FRAME_WIDTH = 100;
+        private const int JUMP_FRAME_WIDTH = 100;
+        private const int SLIDE_FRAME_WIDTH = 100;
+        private const int LAND_FRAME_WIDTH = 100;
 
         private const int WIDTH = 64;
         private const int HEIGHT = 64;
@@ -81,6 +81,8 @@ namespace Trauma.Objects
         private const int LAND_NUM_FRAMES = 1;
 
         private const int FRAME_DURATION = 3;
+        // how many update cycles the player should be forced to stay landing for
+        private const int LAND_DURATION = 20;
 
         #endregion
 
@@ -131,14 +133,24 @@ namespace Trauma.Objects
                      {
                          new AnimationSet(IDLE, ResourceManager.GetTexture("Player_Main"), IDLE_NUM_FRAMES, 
                              IDLE_FRAME_WIDTH, FRAME_DURATION),
+                         new AnimationSet(IDLE + SPLATTER_TAG, ResourceManager.GetTexture("Player_Main_Splatter"), IDLE_NUM_FRAMES,
+                             IDLE_FRAME_WIDTH, FRAME_DURATION),
                          new AnimationSet(WALK, ResourceManager.GetTexture("Player_Main"), WALK_NUM_FRAMES, 
+                             WALK_FRAME_WIDTH, FRAME_DURATION, true, WALK_START_FRAME),
+                         new AnimationSet(WALK + SPLATTER_TAG, ResourceManager.GetTexture("Player_Main_Splatter"), WALK_NUM_FRAMES,
                              WALK_FRAME_WIDTH, FRAME_DURATION, true, WALK_START_FRAME),
                          new AnimationSet(JUMP, ResourceManager.GetTexture("Player_Main"), JUMP_NUM_FRAMES,
                              JUMP_FRAME_WIDTH, FRAME_DURATION, false, JUMP_START_FRAME),
+                         new AnimationSet(JUMP + SPLATTER_TAG, ResourceManager.GetTexture("Player_Main_Splatter"), JUMP_NUM_FRAMES,
+                             JUMP_FRAME_WIDTH, FRAME_DURATION, false, JUMP_START_FRAME),
                          new AnimationSet(SLIDE, ResourceManager.GetTexture("Player_Main"), SLIDE_NUM_FRAMES, 
                              SLIDE_FRAME_WIDTH, FRAME_DURATION, true, SLIDE_START_FRAME),
+                         new AnimationSet(SLIDE + SPLATTER_TAG, ResourceManager.GetTexture("Player_Main_Splatter"), SLIDE_NUM_FRAMES,
+                             SLIDE_FRAME_WIDTH, FRAME_DURATION, true, SLIDE_START_FRAME),
                          new AnimationSet(LAND, ResourceManager.GetTexture("Player_Main"), LAND_NUM_FRAMES,
-                             LAND_FRAME_WIDTH, 20, false, LAND_START_FRAME)
+                             LAND_FRAME_WIDTH, LAND_DURATION, false, LAND_START_FRAME),
+                         new AnimationSet(LAND + SPLATTER_TAG, ResourceManager.GetTexture("Player_Main_Splatter"), LAND_NUM_FRAMES,
+                             LAND_FRAME_WIDTH, LAND_DURATION, false, LAND_START_FRAME)
                      },
                  JUMP, 0)
         {
@@ -149,11 +161,14 @@ namespace Trauma.Objects
             splatTimer = new Timer {AutoReset = true, Interval = SPLAT_INTERVAL};
             splatTimer.Elapsed += (sender, args) => canSplat = true;
             splatTimer.Start();
+
+            splatterAnimation = animations.Find((anim) => anim.IsCalled(curAnimation.Name + SPLATTER_TAG));
         }
 
         public override void Update(Room room, GameTime gameTime)
         {
             base.Update(room, gameTime);
+            splatterAnimation.Update();
 
             if (canJump && jumpKeys.Any(Input.IsKeyDown))
                 DoJump(room);
@@ -185,7 +200,6 @@ namespace Trauma.Objects
             
             if (onGround && Math.Abs(Velocity.X) > 0)
                 ChangeAnimation(WALK);
-
         }
 
         internal override void Move(Room room, Vector2 direction)
@@ -273,15 +287,36 @@ namespace Trauma.Objects
             Landing = true;
         }
 
+        protected override void ChangeAnimation(string name)
+        {
+            AnimationSet oldAnimation = curAnimation;
+            base.ChangeAnimation(name);
+            // only reset the splatter animation if the animation changed
+            if (oldAnimation != curAnimation)
+            {
+                splatterAnimation = animations.Find((anim) => anim.IsCalled(name + SPLATTER_TAG));
+                splatterAnimation.Reset();
+            }
+        }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(curAnimation.GetTexture(),
                              new Rectangle((int) Position.X, (int) Position.Y, (int) size.X, (int) size.Y),
-                             curAnimation.GetFrameRect(), GetDrawColor(), 
+                             curAnimation.GetFrameRect(), Color.White, 
                              0,
                              Vector2.Zero,
                              ShouldBeFlipped() ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 
                              0);
+
+            if (color != Color.Black)
+                spriteBatch.Draw(splatterAnimation.GetTexture(),
+                                 new Rectangle((int) Position.X, (int) Position.Y, (int) size.X, (int) size.Y),
+                                 curAnimation.GetFrameRect(), GetDrawColor(),
+                                 0,
+                                 Vector2.Zero,
+                                 ShouldBeFlipped() ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
+                                 0);
 
             //spriteBatch.Draw(splatterAnimation.GetTexture(),
             //                 new Rectangle((int) position.X - SPLATTER_OFFSET_X, (int) position.Y - SPLATTER_OFFSET_Y,
