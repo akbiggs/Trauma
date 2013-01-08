@@ -18,8 +18,11 @@ namespace Trauma.Engine
         public readonly String Name;
         Texture2D texture;
         public readonly int NumFrames;
+        private int startFrame;
         int width;
         public readonly int FrameDuration;
+
+        private bool shouldLoop;
 
         /// <summary>
         /// Make a new animation set.
@@ -27,36 +30,46 @@ namespace Trauma.Engine
         /// <param name="name">The name of the animation.</param>
         /// <param name="texture">The texture from which the animation will be extracted.</param>
         /// <param name="frames">The number of frames in the animation.</param>
-        /// <param name="width">The width of each frame.</param>
+        /// <param name="frameWidth">The width of each frame.</param>
         /// <param name="frameDuration">How long each frame should last for.</param>
-        public AnimationSet(String name, Texture2D texture, int frames, int width, int frameDuration)
+        /// <param name="shouldLoop">Whether or not the animation should loop.</param>
+        /// <param name="startFrame">The starting frame of the animation.</param>
+        public AnimationSet(String name, Texture2D texture, int frames, int frameWidth, int frameDuration, bool shouldLoop=true, int startFrame=0)
         {
-            this.Name = name;
+            Name = name;
             this.texture = texture;
-            this.NumFrames = frames;
-            this.width = width;
-            this.FrameDuration = frameDuration;
+            NumFrames = frames;
+            this.startFrame = startFrame;
+            width = frameWidth;
+            FrameDuration = frameDuration;
+            this.shouldLoop = shouldLoop;
         }
             
         /// <summary>
         /// Update the animation.
         /// </summary>
-        public void Update(GameTime gameTime)
+        public void Update()
         {
-            animationTimer++;
-            if (animationTimer > FrameDuration)
+            if (shouldLoop || !IsDonePlaying())
             {
-                animationTimer = 0;
-                animationFrame++;
-                if (animationFrame >= NumFrames)
+                animationTimer++;
+                if (animationTimer > FrameDuration)
+                {
+                    animationTimer = 0;
+                    animationFrame++;
+                }
+
+                if (animationFrame == NumFrames)
+                {
                     animationFrame = 0;
+                }
             }
+        }
 
-            if (animationFrame > NumFrames)
-            {
-                animationFrame = 0;
-            }
-
+        public void Reset()
+        {
+            animationTimer = 0;
+            animationFrame = 0;
         }
 
         /// <summary>
@@ -67,7 +80,7 @@ namespace Trauma.Engine
         /// <returns>True if they are the same name, false otherwise.</returns>
         public bool IsCalled(String name)
         {
-            return this.Name == name;
+            return Name == name;
         }
 
         /// <summary>
@@ -85,7 +98,16 @@ namespace Trauma.Engine
         /// <returns>A rectangle of the same size as the frame.</returns>
         public Rectangle GetFrameRect()
         {
-            return new Rectangle(animationFrame * width, 0, width, texture.Height);
+            return new Rectangle((animationFrame + startFrame) * width, 0, width, texture.Height);
+        }
+
+        /// <summary>
+        /// Returns whether or not the animation is done playing.
+        /// </summary>
+        /// <returns></returns>
+        public bool IsDonePlaying()
+        {
+            return animationTimer > FrameDuration - 1 && animationFrame == NumFrames - 1;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 
@@ -6,6 +7,24 @@ namespace Trauma.Helpers
 {
     public static class VectorHelper
     {
+        #region Constants
+
+        private const float EPSILON = 0.001f;
+
+        /* Directions */
+        private const String UP = "Up";
+        private const String UPPER_LEFT = "UpLeft";
+        private const String UPPER_RIGHT = "UpRight";
+        private const String LEFT = "Left";
+        private const String RIGHT = "Right";
+        private const String DOWN = "Down";
+        private const String LOWER_LEFT = "DownLeft";
+        private const String LOWER_RIGHT = "DownRight";
+
+        /* Balancing */
+        private const float DEFAULT_BALANCE = 0.5f;
+        #endregion
+
         /// <summary>
         /// Push against the given vector by the given amount.
         /// </summary>
@@ -26,12 +45,58 @@ namespace Trauma.Helpers
             return new Vector2(newXComponent, newYComponent);
         }
 
+        public static Vector2 ShoveToSide(this Vector2 startPosition, Vector2 boxSize, Vector2 shove)
+        {
+            // figure out which sides to shove it to 
+            Vector2 shovedPosition = startPosition;
+            if (shove.X > 0)
+                shovedPosition.X = startPosition.X + boxSize.X;
+            if (shove.Y > 0)
+                shovedPosition.Y = startPosition.Y + boxSize.Y;
+
+            return shovedPosition;
+        }
+
+        public static Vector2? FromDirectionString(String direction)
+        {
+            Vector2 vector;
+            switch (direction)
+            {
+                case UP:
+                    return new Vector2(0, -1);
+                case LEFT:
+                    return new Vector2(-1, 0);
+                case DOWN:
+                    return new Vector2(0, 1);
+                case RIGHT:
+                    return new Vector2(1, 0);
+                case UPPER_LEFT:
+                    vector = new Vector2(-1, -1);
+                    vector.Normalize();
+                    return vector;
+                case UPPER_RIGHT:
+                    vector = new Vector2(1, -1);
+                    vector.Normalize();
+                    return vector;
+                case LOWER_LEFT:
+                    vector = new Vector2(-1, 1);
+                    vector.Normalize();
+                    return vector;
+                case LOWER_RIGHT:
+                    vector = new Vector2(1, 1);
+                    vector.Normalize();
+                    return vector;
+                default:
+                    return null;
+            }
+        }
+
         /// <summary>
         /// Create a vector from the given angle.
         /// </summary>
         /// <param name="vector">The vector to create.</param>
         /// <param name="angle">The angle to create it from.</param>
-        public static Vector2 VectorFromAngle(float angle)
+        public static Vector2 FromAngle(float angle)
         {
             return new Vector2((float)Math.Sin(angle), -(float)Math.Cos(angle));
         }
@@ -39,6 +104,42 @@ namespace Trauma.Helpers
         public static float ToAngle(this Vector2 vector)
         {
             return (float) Math.Atan2(vector.X, -vector.Y);
+        }
+
+        /// <summary>
+        /// Balances out the vector to make its x-component not completely dwarfed by its y-component,
+        /// or vice-versa.
+        /// </summary>
+        /// <param name="vector">The vector to balance.</param>
+        /// <param name="balanceAmount">How much to balance it by. Valid values are 0 to 1.</param>
+        /// <returns>The vector balanced out to have its x-component lerped towards its y-component if the
+        /// y-component is larger, otherwise the y-component lerped towards its x-component.</returns>
+        public static Vector2 Balance(this Vector2 vector, float balanceAmount=DEFAULT_BALANCE)
+        {
+            Debug.Assert(0 <= balanceAmount && balanceAmount <= 1, "Can't balance by that amount, expecting a value in range of 0 to 1.");
+            Vector2 balancedVector = vector;
+
+            // if they're equal, just return the original vector
+            if (Math.Abs(balancedVector.X - balancedVector.Y) < EPSILON)
+                return balancedVector;
+            
+            // push smaller component towards larger component
+            if (balancedVector.X < balancedVector.Y)
+                return Vector2.Lerp(balancedVector, new Vector2(balancedVector.Y, balancedVector.Y), balanceAmount);
+            if (balancedVector.Y < balancedVector.X)
+                return Vector2.Lerp(balancedVector, new Vector2(balancedVector.X, balancedVector.X), balanceAmount);
+
+            throw new InvalidOperationException("Reached a part of code that shouldn't be reachable.");
+        }
+
+        /// <summary>
+        /// Returns the negative of the given vector.
+        /// </summary>
+        /// <param name="vector">The vector to negate.</param>
+        /// <returns>The vector negated.</returns>
+        public static Vector2 Negate(this Vector2 vector)
+        {
+            return -1*vector;
         }
     }
 }

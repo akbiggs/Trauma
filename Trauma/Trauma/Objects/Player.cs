@@ -17,9 +17,12 @@ namespace Trauma.Objects
     {
         #region Constants
 
+        private const int LEFT = -1;
+        private const int RIGHT = 1;
+
         private const string SPLATTER_TAG = "Splatter";
 
-        private const float SPLATTER_IGNORE = 9f;
+        private const float SPLATTER_IGNORE = 10f;
         private const float SPLAT_INTERVAL = 5f;
         private const float NEGLIGIBLE_SPLATTER_VELOCITY = 0.1f;
 
@@ -31,9 +34,15 @@ namespace Trauma.Objects
         private const float SPLATTER_RESIZE_X = 1.82f;
         private const float SPLATTER_RESIZE_Y = 1.36f;
 
-        private const float MAX_SPEED_X = 8f;
+        private const float MAX_SPEED_X = 6.5f;
         private const float MAX_SPEED_Y = 30f;
+
         private const float JUMP_SPEED = 20f;
+        // minimum speed the player needs to collide with the ground to play landing animation
+        private const float MIN_LAND_SPEED = 20f;
+        // minimum speed the player needs to attain before we consider them as off the ground,
+        // for example when they fall off a platform without jumping
+        private const float MIN_FALL_SPEED = 4f;
         private const float WALL_SLIDE_FACTOR = 4f;
 
         private const float ACCELERATION_X = 1.0f;
@@ -42,21 +51,53 @@ namespace Trauma.Objects
         private const float DECCELERATION_X = 3.0f;
         private const float DECCLERATION_Y = 0f;
 
-        private const int FRAME_WIDTH = 200;
+        private const int IDLE_FRAME_WIDTH = 167;
+        private const int WALK_FRAME_WIDTH = 167;
+        private const int JUMP_FRAME_WIDTH = 167;
+        private const int SLIDE_FRAME_WIDTH = 167;
+        private const int LAND_FRAME_WIDTH = 167;
 
-        private const int WIDTH = 48;
+        private const int WIDTH = 64;
         private const int HEIGHT = 64;
 
-        private const int FRAME_DURATION = 1;
+        private const String IDLE = "Idle";
+        private const int IDLE_START_FRAME = 0;
+        private const int IDLE_NUM_FRAMES = 1;
+
+        private const String WALK = "Walk";
+        private const int WALK_START_FRAME = 4;
+        private const int WALK_NUM_FRAMES = 8;
+
+        private const String JUMP = "Jump";
+        private const int JUMP_START_FRAME = 1;
+        private const int JUMP_NUM_FRAMES = 1;
+
+        private const String SLIDE = "Slide";
+        private const int SLIDE_START_FRAME = 3;
+        private const int SLIDE_NUM_FRAMES = 1;
+
+        private const String LAND = "Land";
+        private const int LAND_START_FRAME = 2;
+        private const int LAND_NUM_FRAMES = 1;
+
+        private const int FRAME_DURATION = 3;
 
         #endregion
 
         #region Members
 
-        private readonly Keys jump;
-        private readonly Keys left;
-        private readonly Keys right;
+        private readonly List<Keys> jumpKeys;
+        private readonly List<Keys> leftKeys;
+        private readonly List<Keys> rightKeys;
         private bool canJump = true;
+        private bool onGround;
+        private int facing = RIGHT;
+        private bool Landing
+        {
+            get { return curAnimation.IsCalled(LAND) && !curAnimation.IsDonePlaying(); }
+            set { if (value) ChangeAnimation(LAND); }
+        }
+
         private AnimationSet splatterAnimation;
 
         private bool canSplat = true;
@@ -67,16 +108,16 @@ namespace Trauma.Objects
             set
             {
                 base.curAnimation = value;
-                if ((splatterAnimation = animations.Find(anim => anim.IsCalled(curAnimation.Name + SPLATTER_TAG))) ==
-                    null)
-                {
-                    splatterAnimation = new AnimationSet(curAnimation.Name + "_" + SPLATTER_TAG,
-                                                         ResourceManager.GetTexture("Player" + "_" + curAnimation.Name +
-                                                                                    "_" + SPLATTER_TAG),
-                                                         curAnimation.NumFrames,
-                                                         373, curAnimation.FrameDuration);
-                    animations.Add(splatterAnimation);
-                }
+                //if ((splatterAnimation = animations.Find(anim => anim.IsCalled(curAnimation.Name + SPLATTER_TAG))) ==
+                //    null)
+                //{
+                //    splatterAnimation = new AnimationSet(curAnimation.Name + "_" + SPLATTER_TAG,
+                //                                         ResourceManager.GetTexture("Player" + "_" + curAnimation.Name +
+                //                                                                    "_" + SPLATTER_TAG),
+                //                                         curAnimation.NumFrames,
+                //                                         373, curAnimation.FrameDuration);
+                //    animations.Add(splatterAnimation);
+                //}
             }
         }
 
@@ -85,18 +126,25 @@ namespace Trauma.Objects
         public Player(Vector2 pos) :
             base(pos, Vector2.Zero, new Vector2(MAX_SPEED_X, MAX_SPEED_Y),
                  new Vector2(ACCELERATION_X, ACCELERATION_Y), new Vector2(DECCELERATION_X, DECCLERATION_Y),
-                 Color.Blue, true, new Vector2(WIDTH, HEIGHT),
+                 Color.Red, true, new Vector2(WIDTH, HEIGHT),
                  new List<AnimationSet>
                      {
-                         // TODO: Replace this with actual animations.
-                         new AnimationSet("Idle", ResourceManager.GetTexture("Player_Idle"), 1, FRAME_WIDTH,
-                                          FRAME_DURATION)
+                         new AnimationSet(IDLE, ResourceManager.GetTexture("Player_Main"), IDLE_NUM_FRAMES, 
+                             IDLE_FRAME_WIDTH, FRAME_DURATION),
+                         new AnimationSet(WALK, ResourceManager.GetTexture("Player_Main"), WALK_NUM_FRAMES, 
+                             WALK_FRAME_WIDTH, FRAME_DURATION, true, WALK_START_FRAME),
+                         new AnimationSet(JUMP, ResourceManager.GetTexture("Player_Main"), JUMP_NUM_FRAMES,
+                             JUMP_FRAME_WIDTH, FRAME_DURATION, false, JUMP_START_FRAME),
+                         new AnimationSet(SLIDE, ResourceManager.GetTexture("Player_Main"), SLIDE_NUM_FRAMES, 
+                             SLIDE_FRAME_WIDTH, FRAME_DURATION, true, SLIDE_START_FRAME),
+                         new AnimationSet(LAND, ResourceManager.GetTexture("Player_Main"), LAND_NUM_FRAMES,
+                             LAND_FRAME_WIDTH, 20, false, LAND_START_FRAME)
                      },
-                 "Idle", 0)
+                 JUMP, 0)
         {
-            jump = Keys.W;
-            left = Keys.A;
-            right = Keys.D;
+            jumpKeys = new List<Keys>{Keys.W, Keys.Up};
+            leftKeys = new List<Keys> {Keys.A, Keys.Left};
+            rightKeys = new List<Keys> {Keys.D, Keys.Right};
 
             splatTimer = new Timer {AutoReset = true, Interval = SPLAT_INTERVAL};
             splatTimer.Elapsed += (sender, args) => canSplat = true;
@@ -105,41 +153,74 @@ namespace Trauma.Objects
 
         public override void Update(Room room, GameTime gameTime)
         {
-            if (canJump && Input.KeyboardTapped(jump))
+            base.Update(room, gameTime);
+
+            if (canJump && jumpKeys.Any(Input.IsKeyDown))
                 DoJump(room);
 
-            if (Input.IsKeyDown(left))
-                Move(room, new Vector2(-1, 0));
-            else if (Input.IsKeyDown(right))
-                Move(room, new Vector2(1, 0));
+            // wait until we've recovered from the recoil of landing before moving again
+            if (!Landing)
+            {
+                if (leftKeys.Any(Input.IsKeyDown))
+                    Move(room, new Vector2(-1, 0));
+                else if (rightKeys.Any(Input.IsKeyDown))
+                    Move(room, new Vector2(1, 0));
+                else
+                    Move(room, Vector2.Zero);
+            }
+            // we still need to call Move at least once per update for collisions etc.
             else
                 Move(room, new Vector2(0, 0));
 
-            base.Update(room, gameTime);
+            if (Math.Abs(Velocity.Y) >= MIN_FALL_SPEED)
+                onGround = false;
+
+            // wait until the landing animation is done playing before changing it
+            if (onGround && !Landing)
+            {
+                Landing = false;
+                if (!curAnimation.IsCalled(WALK)) ChangeAnimation(IDLE);
+            } else if (!hasCollidedWithWall)
+                ChangeAnimation(JUMP);
+            
+            if (onGround && Math.Abs(Velocity.X) > 0)
+                ChangeAnimation(WALK);
+
+        }
+
+        internal override void Move(Room room, Vector2 direction)
+        {
+            if (direction.X == 0 && curAnimation.IsCalled(WALK))
+                ChangeAnimation(IDLE);
+            
+            if (direction.X < 0)
+                facing = LEFT;
+            else if (direction.X > 0)
+                facing = RIGHT;
+
+            base.Move(room, direction);
         }
 
         public override void CollideWithWall(Room room)
         {
             base.CollideWithWall(room);
-            if (Velocity.Y > 0)
+            if (Velocity.Y > 0 && !onGround)
             {
                 Velocity = Velocity.PushBack(new Vector2(0, Velocity.Y/WALL_SLIDE_FACTOR));
-                // TODO: Maybe add in some kind of wall-sliding animation here?
+                if (!curAnimation.IsCalled(LAND))
+                    ChangeAnimation(SLIDE);
                 canJump = true;
 
-                float splatX = Velocity.X > 0 ? position.X + size.X : position.X;
-                float splatY = position.Y + size.Y;
+                float splatX = Velocity.X > 0 ? Position.X + size.X : Position.X;
+                float splatY = Position.Y + size.Y;
                 room.Splat(new Vector2(splatX, splatY), Vector2.One * SLIDE_SPLATTER_SIZE, 
                     color, Velocity);
             }
+
+            // splat if the impact is too big to ignore.
             if (Velocity.LengthSquared() > Math.Pow(SPLATTER_IGNORE, 2))
             {
-                // figure out where the splatter should be positioned
-                Vector2 splatPosition = position;
-                if (Velocity.X > 0)
-                    splatPosition.X = position.X + size.X;
-                if (Velocity.Y > 0)
-                    splatPosition.Y = position.Y + size.Y;
+                Vector2 splatPosition = Position.ShoveToSide(size, Velocity);
 
                 if (canSplat)
                 {
@@ -152,9 +233,23 @@ namespace Trauma.Objects
             }
         }
 
+        public override void CollideWithObject(GameObject obj, Room room, BBox collision)
+        {
+            if (obj is InkBlob)
+                color = color.Combine(obj.Color);
+            base.CollideWithObject(obj, room, collision);
+        }
+
         public override void CollideWithGround(Room room)
         {
-            Land();
+            if (!onGround && Velocity.Y >= MIN_LAND_SPEED)
+            {
+                Velocity.X = 0;
+                Land();
+            }
+            Velocity.Y = 0;
+            onGround = true;
+            canJump = true;
             base.CollideWithGround(room);
         }
 
@@ -163,9 +258,10 @@ namespace Trauma.Objects
         /// </summary>
         private void DoJump(Room room)
         {
+            ChangeAnimation(JUMP);
             Velocity.Y = -JUMP_SPEED;
             canJump = false;
-            room.Splat(position, Vector2.One * JUMP_SPLATTER_SIZE, color, Velocity);
+            room.Splat(Position, Vector2.One * JUMP_SPLATTER_SIZE, color, Velocity);
         }
 
         /// <summary>
@@ -173,20 +269,44 @@ namespace Trauma.Objects
         /// </summary>
         internal void Land()
         {
-            // TODO: If we get a landing animation, don't forget to play it here.
-            canJump = true;
+            ChangeAnimation(LAND);
+            Landing = true;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(curAnimation.GetTexture(),
-                             new Rectangle((int) position.X, (int) position.Y, (int) size.X, (int) size.Y),
-                             curAnimation.GetFrameRect(), Color.White);
+                             new Rectangle((int) Position.X, (int) Position.Y, (int) size.X, (int) size.Y),
+                             curAnimation.GetFrameRect(), GetDrawColor(), 
+                             0,
+                             Vector2.Zero,
+                             ShouldBeFlipped() ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 
+                             0);
 
-            spriteBatch.Draw(splatterAnimation.GetTexture(),
-                             new Rectangle((int) position.X - SPLATTER_OFFSET_X, (int) position.Y - SPLATTER_OFFSET_Y,
-                                           (int) (size.X*SPLATTER_RESIZE_X), (int) (size.Y*SPLATTER_RESIZE_Y)),
-                             splatterAnimation.GetFrameRect(), color);
+            //spriteBatch.Draw(splatterAnimation.GetTexture(),
+            //                 new Rectangle((int) position.X - SPLATTER_OFFSET_X, (int) position.Y - SPLATTER_OFFSET_Y,
+            //                               (int) (size.X*SPLATTER_RESIZE_X), (in  t) (size.Y*SPLATTER_RESIZE_Y)),
+            //                 splatterAnimation.GetFrameRect(), color);
+        }
+
+        private Color GetDrawColor()
+        {
+            if (color == Color.Black)
+                return Color.White;
+
+            return color;
+        }
+
+        private bool ShouldBeRotated()
+        {
+            return curAnimation.IsCalled(JUMP);
+        }
+
+        private bool ShouldBeFlipped()
+        {
+            if (curAnimation.IsCalled(SLIDE))
+                return facing == RIGHT;
+            return facing == LEFT;
         }
     }
 }

@@ -70,7 +70,7 @@ namespace Trauma.Engine
 
             // TODO: Replace this with sections defining zoom levels.
             if (Input.MouseLeftButtonPressed)
-                ZoomTo(1f);
+                ZoomTo(1.5f);
             if (Input.MouseRightButtonDown)
                 ZoomTo(2f);
         }

@@ -29,7 +29,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>5</ApplicationRevision>
+    <ApplicationRevision>6</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -92,6 +92,8 @@
     <Compile Include="Engine\InkMap.cs" />
     <Compile Include="Engine\Input.cs" />
     <Compile Include="Engine\ResourceManager.cs" />
+    <Compile Include="Helpers\ColorHelper.cs" />
+    <Compile Include="Helpers\FloatHelper.cs" />
     <Compile Include="Helpers\ListHelper.cs" />
     <Compile Include="Helpers\MapHelper.cs" />
     <Compile Include="Helpers\TextureHelper.cs" />
@@ -109,6 +111,7 @@
     <Compile Include="Objects\Player.cs" />
     <Compile Include="Objects\Portal.cs" />
     <Compile Include="Objects\Splatter.cs" />
+    <Compile Include="Objects\WaterBlob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Engine\Program.cs" />
     <Compile Include="Engine\GameEngine.cs" />

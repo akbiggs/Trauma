@@ -11,7 +11,7 @@ namespace Trauma.Objects
     {
         #region Constant
 
-        private const byte FADE_SPEED = 2;
+        private const byte FADE_SPEED = 4;
         #endregion
 
         #region Members
@@ -35,7 +35,9 @@ namespace Trauma.Objects
         public void Update()
         {
             color.A = (byte)Math.Max(color.A - FADE_SPEED, 0);
-            color.B = (byte) Math.Max(color.B - FADE_SPEED, 0);
+            color.R = color.R != 0 ? (byte) Math.Max(color.R - FADE_SPEED, 0) : (byte)0;
+            color.G = color.G != 0 ? (byte) Math.Max(color.G - FADE_SPEED, 0) : (byte)0;
+            color.B = color.B != 0 ? (byte) Math.Max(color.B - FADE_SPEED, 0) : (byte)0;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -46,7 +48,7 @@ namespace Trauma.Objects
 
         public bool IsVisible()
         {
-            return color.A > 0;
+            return color.PackedValue > 0;
         }
     }
 }

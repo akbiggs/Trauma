@@ -23,6 +23,7 @@ namespace Trauma.Engine
         const string PLAYER_DIR_NAME = "Player";
         const string PORTAL_DIR_NAME = "Portal";
         const string BLOB_DIR_NAME = "Blob";
+        const string GENERATOR_DIR_NAME = "Generator";
         const string SPLATTER_DIR_NAME = "Splatter";
         const string BACKGROUND_DIR_NAME = "Background";
         const string MISC_DIR_NAME = "Misc";
@@ -34,7 +35,11 @@ namespace Trauma.Engine
         private static readonly List<String> playerTexNames = new List<String>
             {
                 "Idle",
-                "Idle_Splatter"
+                "Idle_Splatter",
+                "Main",
+                "Walk",
+                "Jump",
+                "Land"
             };
         static readonly List<String> portalTexNames = new List<String>();
 
@@ -44,6 +49,10 @@ namespace Trauma.Engine
                 "2"
             };
         static readonly List<String> blobTexNames = new List<String>();
+        private static readonly List<String> generatorTexNames = new List<string>
+            {
+                "Drip"
+            }; 
         static readonly List<String> backgroundTexNames = new List<string>
             {
                 "Intro"
@@ -60,6 +69,7 @@ namespace Trauma.Engine
             { PORTAL_DIR_NAME, portalTexNames },
             { SPLATTER_DIR_NAME, splatterTexNames },
             { BLOB_DIR_NAME, blobTexNames },
+            { GENERATOR_DIR_NAME, generatorTexNames },
             { BACKGROUND_DIR_NAME, backgroundTexNames },
             { MISC_DIR_NAME, miscTexNames }
         };
@@ -126,8 +136,6 @@ namespace Trauma.Engine
                     soundDic[path + NAME_SEPARATOR + name] =
                         Content.Load<Song>(SOUND_DIR_NAME + DIR_SEPARATOR + path + DIR_SEPARATOR + name);
         }
-
-        
 
         /// <summary>
         /// Gets the sound specified by the given name.

@@ -14,31 +14,51 @@ namespace Trauma.Objects
     /// </summary>
     public class GameObject
     {
+        #region Constants
+        private const float COLLISION_FORGIVENESS_FACTOR = 0.1f;
+        #endregion
+
         #region Members
 
         protected readonly List<AnimationSet> animations;
         private readonly Vector2 deceleration;
         private readonly Vector2 maxSpeed;
 
-        private readonly float rotation;
+        protected float rotation;
         protected Vector2 Velocity;
 
         private Vector2 acceleration;
-        private BBox bbox;
-        protected Color color;
+        protected BBox box;
 
         private bool colorable;
+        protected Color color;
+        public Color Color
+        {
+            get { return color; }
+        }
+
         protected virtual AnimationSet curAnimation { get; set; }
         private bool hasMoved;
+        protected bool hasCollidedWithWall;
 
         private Vector2 maxPosition;
         private Vector2 minPosition;
-        protected Vector2 position;
+        private Vector2 position;
         protected Vector2 size;
 
         public Vector2 Position
         {
             get { return position; }
+            set
+            {
+                position = value;
+                box.Position = value;
+            }
+        }
+
+        public Vector2 Center
+        {
+            get { return new Vector2(Position.X + (size.X / 2), Position.Y + (size.Y / 2)); }
         }
 
         #endregion
@@ -79,7 +99,7 @@ namespace Trauma.Objects
 
             this.rotation = rotation;
 
-            bbox = new BBox(new Rectangle((int) position.X, (int) position.Y, (int) size.X, (int) size.Y));
+            box = new BBox(new Rectangle((int) position.X, (int) position.Y, (int) size.X, (int) size.Y));
         }
 
         /// <summary>
@@ -114,7 +134,8 @@ namespace Trauma.Objects
         /// <param name="gameTime">The current time of the game.</param>
         public virtual void Update(Room room, GameTime gameTime)
         {
-            curAnimation.Update(gameTime);
+            hasCollidedWithWall = false;
+            curAnimation.Update();
         }
 
         /// <summary>
@@ -130,7 +151,7 @@ namespace Trauma.Objects
             ApplyGravity(room);
             Accelerate(direction);
 
-            // TODO: Figure out a way to resolve collisions and do only one collide with wall call.
+            // TODO: Figure out a way to resolve collisions and do only one function call.
 
             // resolve collisions on x-axis first
             UpdateBounds(room);
@@ -142,11 +163,31 @@ namespace Trauma.Objects
         }
 
         /// <summary>
+        /// Returns whether or not the given object is colliding with this object.
+        /// </summary>
+        /// <param name="obj">The object to check.</param>
+        /// <param name="collisionRegion">The region of collision. Empty if no collision occurred.</param>
+        /// <returns>True if the objects are colliding, false otherwise.</returns>
+        public virtual bool IsColliding(GameObject obj, out BBox collisionRegion)
+        {
+            collisionRegion = box.Intersect(obj.box);
+
+            // because boxes are cruel, and not very true to the shape of the objects, only return true
+            // if the area of collision is larger than we're willing to forgive.
+            return collisionRegion != null && !collisionRegion.IsEmpty() && collisionRegion.Area >= box.Area * COLLISION_FORGIVENESS_FACTOR;
+        }
+
+        public virtual void CollideWithObject(GameObject obj, Room room, BBox collision)
+        {
+        }
+
+        /// <summary>
         ///     Collides with a wall.
         /// </summary>
         /// <param name="room">The room containing the wall.</param>
         public virtual void CollideWithWall(Room room)
         {
+            hasCollidedWithWall = true;
         }
 
         /// <summary>
@@ -173,6 +214,7 @@ namespace Trauma.Objects
         private void Accelerate(Vector2 direction)
         {
             var change = new Vector2(acceleration.X*direction.X, acceleration.Y*direction.Y);
+            // let gravity handle decelleration on the y-axis.
             if (Math.Abs(change.X - 0) < float.Epsilon)
                 Decellerate();
             Velocity = Vector2.Clamp(Velocity += change, -maxSpeed, maxSpeed);
@@ -185,30 +227,36 @@ namespace Trauma.Objects
 
         private void UpdateBounds(Room room)
         {
-            minPosition = room.GetMinPosition(position, size);
-            maxPosition = room.GetMaxPosition(position, size);
+            minPosition = room.GetMinPosition(box.Position, box.Size);
+            maxPosition = room.GetMaxPosition(box.Position, box.Size);
         }
 
         private void ChangeXPosition(Room room)
         {
             // check for colliding against a wall
-            if (position.X + Velocity.X < minPosition.X || position.X + Velocity.X > maxPosition.X)
+            if (Position.X + Velocity.X < minPosition.X || Position.X + Velocity.X > maxPosition.X)
                 CollideWithWall(room);
-            position.X = MathHelper.Clamp(position.X + Velocity.X, minPosition.X, maxPosition.X);
+            Position = new Vector2(MathHelper.Clamp(Position.X + Velocity.X, minPosition.X, maxPosition.X), Position.Y);
         }
 
         private void ChangeYPosition(Room room)
         {
+            bool shouldCollideWithGround = false;
+
             // check for colliding against a wall
-            if (position.Y + Velocity.Y < minPosition.Y)
+            if (Position.Y + Velocity.Y < minPosition.Y)
                 CollideWithWall(room);
-            else if (position.Y + Velocity.Y > maxPosition.Y)
+            else if (Position.Y + Velocity.Y > maxPosition.Y)
             {
                 CollideWithWall(room);
-                CollideWithGround(room);
+                // handle the ground collision after we've moved, to prevent weirdness when player is moving too fast
+                shouldCollideWithGround = true;
             }
 
-            position.Y = MathHelper.Clamp(position.Y + Velocity.Y, minPosition.Y, maxPosition.Y);
+            Position = new Vector2(Position.X, MathHelper.Clamp(position.Y + Velocity.Y, minPosition.Y, maxPosition.Y));
+
+            if (shouldCollideWithGround)
+                CollideWithGround(room);
         }
 
         /// <summary>
@@ -222,16 +270,22 @@ namespace Trauma.Objects
         }
 
         /// <summary>
-        ///     Changes the animation being played.
+        ///     Changes the animation being played. Doesn't do anything if called with the name of the currently
+        ///     playing animation.
         /// </summary>
         /// <param name="name">The name of the new animation.</param>
         /// <exception cref="System.InvalidOperationException">Specified animation doesn't exist.</exception>
-        private void ChangeAnimation(string name)
+        protected virtual void ChangeAnimation(string name)
         {
-            AnimationSet newAnimation = GetAnimationByName(name);
-            if (newAnimation == null)
-                throw new InvalidOperationException("Specified animation doesn't exist.");
-            curAnimation = newAnimation;
+            if (!curAnimation.IsCalled(name))
+            {
+                AnimationSet newAnimation = GetAnimationByName(name);
+                if (newAnimation == null)
+                    throw new InvalidOperationException("Specified animation doesn't exist.");
+                newAnimation.Reset();
+                newAnimation.Update();
+                curAnimation = newAnimation;
+            }
         }
 
         private AnimationSet GetAnimationByName(string name)

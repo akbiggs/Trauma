@@ -13,6 +13,12 @@ namespace Trauma.Rooms
     /// </summary>
     public class Background
     {
+        private int width, height;
+        public Background(int width, int height)
+        {
+            this.width = width;
+            this.height = height;
+        }
         /// <summary>
         /// Updates the background.
         /// </summary>
@@ -27,7 +33,7 @@ namespace Trauma.Rooms
         /// <param name="spriteBatch">The sprite batch.</param>
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(ResourceManager.GetTexture("Background_Intro"), new Rectangle(0, 0, 40 * 40, 40 * 40), null, Color.Red, 0,
+            spriteBatch.Draw(ResourceManager.GetTexture("Background_Intro"), new Rectangle(0, 0, width, height), null, Color.Red, 0,
                 Vector2.Zero, SpriteEffects.None, 1);
         }
     }

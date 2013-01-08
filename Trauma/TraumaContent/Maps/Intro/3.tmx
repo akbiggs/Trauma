@@ -40,5 +40,29 @@
  </layer>
  <objectgroup name="Objects" width="40" height="40">
   <object name="Player" x="139" y="87" width="48" height="63"/>
+  <object name="Gen1" type="Generator" x="569" y="171" width="39" height="42">
+   <properties>
+    <property name="Color" value="Red"/>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Gen2" type="Generator" x="674" y="218" width="45" height="34">
+   <properties>
+    <property name="Color" value="Blue"/>
+    <property name="Direction" value="Down"/>
+   </properties>
+  </object>
+  <object name="Gen3" type="Generator" x="1004" y="216" width="47" height="32">
+   <properties>
+    <property name="Color" value="Yellow"/>
+    <property name="Direction" value="Down"/>
+   </properties>
+  </object>
+  <object name="Gen4" type="Generator" x="1098" y="189" width="45" height="26">
+   <properties>
+    <property name="Color" value="Red"/>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>
