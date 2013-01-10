@@ -15,16 +15,17 @@ namespace Trauma.Engine
     /// </summary>
     public class GameEngine : Microsoft.Xna.Framework.Game
     {
-        const float FADE_FACTOR = 0.5f;
+        const float FADE_FACTOR = 25;
 
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        public static GraphicsDeviceManager graphics;
+        public static SpriteBatch spriteBatch;
 
         /// <summary>
         /// All of the rooms in the game, in order.
         /// </summary>
         List<String> roomNames = new List<String>
             {
+                "Intro_1",
                 "Intro_3"
             };
 
@@ -35,6 +36,16 @@ namespace Trauma.Engine
         Song curSong;
         Credits credits;
         GameState state;
+
+        static Color fade = Color.Transparent;
+        private static Color lastFade = Color.Transparent;
+        private static Color nextFade = Color.Transparent;
+        private static byte fadeSpeed;
+
+        private bool ShouldFade
+        {
+            get { return fade != nextFade; }
+        }
 
         /// <summary>
         /// The main component in charge of the game at the moment.
@@ -60,7 +71,6 @@ namespace Trauma.Engine
         protected override void Initialize()
         {
             state = GameState.Intro;
-
             base.Initialize();
         }
 
@@ -103,28 +113,37 @@ namespace Trauma.Engine
 
             Input.Update();
 
-            GameState oldState = state;
-            state = GetNextState();
-
-            // handle state transition
-            if (state != oldState)
+            if (!ShouldFade)
             {
-                if (state == GameState.Exit)
-                    Exit();
-                else
-                    SetupState();
-            }
+                GameState oldState = state;
+                state = GetNextState();
 
-            controller.Update(gameTime);
+                // handle state transition
+                if (state != oldState)
+                {
+                    if (state == GameState.Exit)
+                        Exit();
+                    else
+                        SetupState();
+                }
+
+                if (controller is Room && controller.Finished)
+                    controller = curRoom = NextRoom();
+                if (controller != null)
+                    controller.Update(gameTime);
+            } else 
+                fade = fade.PushTowards(nextFade, fadeSpeed);
 
             base.Update(gameTime);
         }
+
 
         /// <summary>
         /// Set up the state of the game.
         /// </summary>
         private void SetupState()
         {
+
             switch (state)
             {
                 case GameState.Intro:
@@ -144,6 +163,7 @@ namespace Trauma.Engine
                     controller = gameMenu;
                     break;
                 case GameState.Credits:
+                    credits = new Credits();
                     controller = credits;
                     break;
                 default:
@@ -160,7 +180,7 @@ namespace Trauma.Engine
             if (!MoreLevels())
                 throw new InvalidOperationException();
             
-            return new Room(Color.Black, ResourceManager.LoadMap(roomNames.Pop(), Content));
+            return new Room(Color.Black, ResourceManager.LoadMap(roomNames.Pop(), Content), GraphicsDevice);
         }
 
         /// <summary>
@@ -169,44 +189,45 @@ namespace Trauma.Engine
         /// <returns>The next state of the game.</returns>
         private GameState GetNextState()
         {
-            switch (state)
-            {
-                case GameState.Intro:
-                    if (intro.Finished)
-                        return GameState.TitleScreen;
-                    break;
+            if (!ShouldFade)
+                switch (state)
+                {
+                    case GameState.Intro:
+                        if (intro.Finished)
+                            return GameState.TitleScreen;
+                        break;
 
-                case GameState.TitleScreen:
-                    if (titleScreen.Finished)
-                        return titleScreen.ExitSelected ? GameState.Exit : GameState.Room;
-                    break;
+                    case GameState.TitleScreen:
+                        if (titleScreen.Finished)
+                            return titleScreen.ExitSelected ? GameState.Exit : GameState.Room;
+                        break;
 
-                case GameState.Room:
-                    if (curRoom.MenuRequested)
-                        return GameState.GameMenu;
-                    if (curRoom.Finished && !MoreLevels())
-                        return GameState.Credits;
-                    break;
+                    case GameState.Room:
+                        if (curRoom.MenuRequested)
+                            return GameState.GameMenu;
+                        if (curRoom.Finished && !MoreLevels())
+                            return GameState.Credits;
+                        break;
 
-                case GameState.Credits:
-                    if (credits.Finished)
+                    case GameState.Credits:
+                        if (credits.Finished)
+                            return GameState.Exit;
+                        break;
+
+                    case GameState.GameMenu:
+                        if (gameMenu.Finished)
+                            return GameState.Room;
+                        break;
+
+                    case GameState.Exit:
                         return GameState.Exit;
-                    break;
 
-                case GameState.GameMenu:
-                    if (gameMenu.Finished)
-                        return GameState.Room;
-                    break;
+                    // if we've defaulted, the game is in an unknown/unimplemented state, so crash.
+                    default:
+                        throw new InvalidOperationException();
+                }
 
-                case GameState.Exit:
-                    return GameState.Exit;
-
-                // if we've defaulted, the game is in an unknown/unimplemented state, so crash.
-                default:
-                    throw new InvalidOperationException();
-            }
-
-            // if one of the cases fell through without returning, return
+            // if one of the cases fell through without returning or we're in a fade, return
             // the current state of the game.
             return state;
         }
@@ -219,7 +240,12 @@ namespace Trauma.Engine
         {
             GraphicsDevice.Clear(Color.Black);
 
-            controller.Draw(spriteBatch);
+            if (controller != null)
+                controller.Draw(spriteBatch);
+            // fill the screen with the fade color
+            spriteBatch.Begin();
+            spriteBatch.Draw(ResourceManager.GetTexture("Misc_Pixel"), new Rectangle(0, 0, 4000, 4000), fade);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
@@ -231,12 +257,14 @@ namespace Trauma.Engine
         /// <param name="speed">The speed to fade out at.</param>
         public static void FadeOut(Color color, FadeSpeed speed)
         {
-            // TODO: Fade out the screen to the given color.
+            nextFade = color;
+            fadeSpeed = (byte) speed;
         }
 
-        public static void FadeIn(Color color, FadeSpeed speed)
+        public static void FadeIn(FadeSpeed speed)
         {
-            // TODO: Fade in the screen to the given color.
+            nextFade = Color.Transparent;
+            fadeSpeed = (byte) speed;
         }
 
         /// <summary>

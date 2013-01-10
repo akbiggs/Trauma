@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using TiledLib;
 
 namespace Trauma.Rooms
@@ -17,7 +18,7 @@ namespace Trauma.Rooms
         /// Initializes a new instance of the <see cref="DenialRoom" /> class.
         /// </summary>
         /// <param name="map">The map this room is based off of.</param>
-        public DenialRoom(Color color, Map map) : base(color, map)
+        public DenialRoom(Color color, Map map, GraphicsDevice device) : base(color, map, device)
         {
         }
     }

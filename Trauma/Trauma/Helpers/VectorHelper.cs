@@ -45,6 +45,23 @@ namespace Trauma.Helpers
             return new Vector2(newXComponent, newYComponent);
         }
 
+        public static Vector2 PushTowards(this Vector2 vector, Vector2 towards, Vector2 push)
+        {
+            Vector2 result = vector;
+            
+            if (vector.X < towards.X)
+                result.X = Math.Min(vector.X + push.X, towards.X);
+            else
+                result.X = Math.Max(vector.X - push.X, towards.X);
+
+            if (vector.Y < towards.Y)
+                result.Y = Math.Min(vector.Y + push.Y, towards.Y);
+            else
+                result.Y = Math.Max(vector.Y - push.Y, towards.Y);
+
+            return result;
+        }
+
         public static Vector2 ShoveToSide(this Vector2 startPosition, Vector2 boxSize, Vector2 shove)
         {
             // figure out which sides to shove it to 

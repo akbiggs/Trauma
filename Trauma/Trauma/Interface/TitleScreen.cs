@@ -18,7 +18,6 @@ namespace Trauma.Interface
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            throw new NotImplementedException();
         }
 
         public bool Finished

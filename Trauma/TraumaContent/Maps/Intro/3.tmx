@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="40" height="40" tilewidth="50" tileheight="50">
- <tileset firstgid="1" name="Test" tilewidth="50" tileheight="50">
+ <tileset firstgid="1" name="TestTileset" tilewidth="50" tileheight="50">
   <image source="../../Textures/Tileset/pf-horizontal.png" width="500" height="100"/>
   <tile id="2">
    <properties>
@@ -33,6 +33,9 @@
    </properties>
   </tile>
  </tileset>
+ <tileset firstgid="21" name="Platforms" tilewidth="50" tileheight="50">
+  <image source="../../Textures/Tileset/Platforms.png" width="500" height="200"/>
+ </tileset>
  <layer name="Tiles" width="40" height="40">
   <data encoding="base64" compression="zlib">
    eJzt1LkOgCAQRVHc993//1ZfYyExoRIR70luaKicQWOA96QqU7kqVKkqVatGtZ7v2Ho1qFFNalaLWtWmds93YhDSzO+ENPO/SMx1Vq536VtnrrN64l3au3ruq+v09a3sXT331XXG+A8DAAAAAADfcQCiTQg9
@@ -62,6 +65,26 @@
    <properties>
     <property name="Color" value="Red"/>
     <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Test2" type="Section" x="800" y="400" width="400" height="300">
+   <properties>
+    <property name="Zoom" value="Far"/>
+   </properties>
+  </object>
+  <object name="Test3" type="Section" x="300" y="400" width="500" height="300">
+   <properties>
+    <property name="Zoom" value="Close"/>
+   </properties>
+  </object>
+  <object name="Test3" type="Section" x="300" y="150" width="500" height="250">
+   <properties>
+    <property name="Zoom" value="Center"/>
+   </properties>
+  </object>
+  <object name="Portal1" type="Portal" x="1476" y="33" width="150" height="150">
+   <properties>
+    <property name="Color" value="Purple"/>
    </properties>
   </object>
  </objectgroup>

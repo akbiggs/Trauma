@@ -42,7 +42,13 @@ namespace Trauma.Engine
                 "Jump",
                 "Land"
             };
-        static readonly List<String> portalTexNames = new List<String>();
+        static readonly List<String> portalTexNames = new List<String>
+            {
+                "Spin1",
+                "Spin2",
+                "Spin3",
+                "Spin4"
+            };
 
         private static readonly List<String> splatterTexNames = new List<String>
             {

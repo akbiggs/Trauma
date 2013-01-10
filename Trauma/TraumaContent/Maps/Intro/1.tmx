@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="23" height="30" tilewidth="32" tileheight="32">
- <tileset firstgid="1" name="Test" tilewidth="32" tileheight="32">
-  <image source="../../Textures/Tileset/sketch1.jpg" width="800" height="601"/>
-  <tile id="1">
+<map version="1.0" orientation="orthogonal" width="40" height="40" tilewidth="50" tileheight="50">
+ <tileset firstgid="1" name="Platforms" tilewidth="50" tileheight="50">
+  <image source="../../Textures/Tileset/Platforms.png" width="500" height="200"/>
+  <tile id="20">
    <properties>
     <property name="Type" value="Solid"/>
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="451" name="Stuff" tilewidth="98" tileheight="98">
-  <image source="../../../../../../Dropbox/GMD -Trauma/pf-horizontal.png" width="500" height="100"/>
- </tileset>
- <layer name="Tiles" width="23" height="30">
+ <layer name="Tiles" width="40" height="40">
   <data encoding="base64" compression="zlib">
-   eJybysjAMHUUj2ICeBSMglFAHhjovDuKR/EoHsXDGQMA/gIbEg==
+   eJztzsEJADAMAzEvkf1X7RCmUFId6H+TZPJuE39N/rr8dfnr8tf1499c4G/3HwAAAGx2ACSHV50=
   </data>
  </layer>
- <objectgroup name="Objects" width="23" height="30">
-  <object name="Player" x="32" y="23" width="35" height="35"/>
+ <objectgroup name="Objects" width="40" height="40">
+  <object name="Player" type="Player" x="300" y="150" width="50" height="50"/>
+  <object name="Portal" type="Portal" x="1700" y="350" width="200" height="200">
+   <properties>
+    <property name="Color" value="Black"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

@@ -14,6 +14,12 @@ namespace Trauma.Engine
     {
         int animationTimer = 0;
         int animationFrame = 0;
+        public int CurFrameNumber
+        {
+            get { return animationFrame; }
+        }
+
+        List<BBox> frameBoxes; 
 
         public readonly String Name;
         Texture2D texture;
@@ -43,7 +49,24 @@ namespace Trauma.Engine
             width = frameWidth;
             FrameDuration = frameDuration;
             this.shouldLoop = shouldLoop;
+
+            //frameBoxes = CalculateFrameBBoxes(texture, frames, startFrame);
         }
+
+        //private List<BBox> CalculateFrameBBoxes(Texture2D texture, int frames, int startFrame)
+        //{
+        //    List<BBox> boxes = new List<BBox>(frames);
+        //    for (int i = startFrame; i < startFrame + frames; i++)
+        //    {
+        //        Rectangle frameRect = GetFrameRect(i);
+        //        boxes.Add(CalculateFrameBBox(texture, frameRect));
+        //    }
+        //}
+
+        //private BBox CalculateFrameBBox(Texture2D texture, Rectangle frameRect)
+        //{
+        //    Color[] colors = new Color[frameRect.Width * frameRect.Height];
+        //}
             
         /// <summary>
         /// Update the animation.
@@ -93,12 +116,22 @@ namespace Trauma.Engine
         }
 
         /// <summary>
-        /// Returns a rectangle corresponding to the current frame.
+        /// Returns a rectangle corresponding to the given frame.
+        /// </summary>
+        /// <param name="frame">The frame to get the rectangle from.</param>
+        /// <returns>A rectangle of the same size as the frame.</returns>
+        public Rectangle GetFrameRect(int frame)
+        {
+            return new Rectangle((frame + startFrame) * width, 0, width, texture.Height);
+        }
+
+        /// <summary>
+        /// Return a rectangle corresponding to the animation's current frame.
         /// </summary>
         /// <returns>A rectangle of the same size as the frame.</returns>
         public Rectangle GetFrameRect()
         {
-            return new Rectangle((animationFrame + startFrame) * width, 0, width, texture.Height);
+            return GetFrameRect(animationFrame);
         }
 
         /// <summary>

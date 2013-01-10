@@ -41,7 +41,6 @@ namespace Trauma.Interface
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            throw new NotImplementedException();
         }
 
         public virtual bool Finished
@@ -51,13 +50,12 @@ namespace Trauma.Interface
 
         public void Finish()
         {
-            GameEngine.FadeOut(Color.White, FadeSpeed.Slow);
+            GameEngine.FadeOut(Color.White, FadeSpeed.Fast);
             finished = true;
         }
 
         public void Update(GameTime gameTime)
         {
-            throw new NotImplementedException();
         }
     }
 }

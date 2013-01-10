@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using TiledLib;
 
 namespace Trauma.Rooms
@@ -17,7 +18,7 @@ namespace Trauma.Rooms
         /// Create a new scroll room from the given map.
         /// </summary>
         /// <param name="map">The map of the room.</param>
-        public ScrollRoom(Color color, Map map) : base(color, map)
+        public ScrollRoom(Color color, Map map, GraphicsDevice device) : base(color, map, device)
         {
         }
     }

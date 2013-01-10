@@ -18,7 +18,6 @@ namespace Trauma.Interface
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            throw new NotImplementedException();
         }
 
         public bool Finished
@@ -33,7 +32,7 @@ namespace Trauma.Interface
 
         public void Update(Microsoft.Xna.Framework.GameTime gameTime)
         {
-            throw new NotImplementedException();
+            Finish();
         }
     }
 }

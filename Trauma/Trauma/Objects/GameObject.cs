@@ -29,6 +29,10 @@ namespace Trauma.Objects
 
         private Vector2 acceleration;
         protected BBox box;
+        public BBox Box
+        {
+            get { return box; }
+        }
 
         private bool colorable;
         protected Color color;
@@ -58,7 +62,7 @@ namespace Trauma.Objects
 
         public Vector2 Center
         {
-            get { return new Vector2(Position.X + (size.X / 2), Position.Y + (size.Y / 2)); }
+            get { return Position + size / 2; }
         }
 
         #endregion

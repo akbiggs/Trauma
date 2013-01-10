@@ -11,7 +11,7 @@ namespace Trauma.Objects
     {
         #region Constant
 
-        private const byte FADE_SPEED = 4;
+        private const byte FADE_SPEED = 2;
         #endregion
 
         #region Members

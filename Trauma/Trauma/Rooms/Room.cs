@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
@@ -20,20 +21,30 @@ namespace Trauma.Rooms
     {
         #region Constants
 
-        // used to identify the player on the map
+        /* Map parsing */
+        private const string TILE_LAYER_NAME = "Tiles";
+        
         private const string PLAYER_OBJECT_NAME = "Player";
-
-        // used to identify generators
         private const string GENERATOR_OBJECT_NAME = "Generator";
+        private const string PORTAL_OBJECT_NAME = "Portal";
+        private const string SECTION_OBJECT_NAME = "Section";
+
+        private const string NEAR = "Close";
+        private const float NEAR_ZOOM_LEVEL = 2f;
+        private const string MEDIUM = "Medium";
+        private const float MEDIUM_ZOOM_LEVEL = 1.4f;
+        private const string FAR = "Far";
+        private const float FAR_ZOOM_LEVEL = 1.1f;
+
+        private const string CENTER = "Center";
+
         private const string COLOR_PROPERTY_NAME = "Color";
         private const string DIRECTION_PROPERTY_NAME = "Direction";
         private const string INTERVAL_PROPERTY_NAME = "Interval";
         private const string SPEED_PROPERTY_NAME = "Speed";
+        private const string ZOOM_PROPERTY_NAME = "Zoom";
 
-        // used to find the layer in the map with all of the tiles
-        private const string TILE_LAYER_NAME = "Tiles";
-
-        private const float DEFAULT_GRAVITY = 1f;
+        private const float DEFAULT_GRAVITY = 0.75f;
 
         private const float DEFAULT_GENERATOR_VELOCITY = 15;
         private const int DEFAULT_GENERATOR_INTERVAL = 20;
@@ -59,6 +70,7 @@ namespace Trauma.Rooms
 
         private Tile[,] tiles;
 
+        private List<Splatter> splatterBuffer = new List<Splatter>(); 
         private List<GameObject> toAdd = new List<GameObject>();
         private List<GameObject> toRemove = new List<GameObject>();
 
@@ -66,14 +78,16 @@ namespace Trauma.Rooms
         public bool MenuRequested;
         private Camera camera;
         private Color color;
-        private Section curSection;
+        private Section curSection = null;
         private List<Dialogue> dialogues = new List<Dialogue>();
         private bool finished;
 
         private Player player;
-        private Portal portal;
+        private List<Portal> portals = new List<Portal>();
         private List<Section> sections = new List<Section>();
         private Vector2 tilesize;
+
+        private bool firstDraw = true;
 
         // used for collisions to shove some things just outside of walls
         private float Epsilon
@@ -94,12 +108,11 @@ namespace Trauma.Rooms
         /// <param name="color">The color of the map.</param>
         /// <param name="map">The map this room is based on.</param>
         /// <param name="gravity">The gravity of the room.</param>
-        public Room(Color color, Map map, float gravity = DEFAULT_GRAVITY)
+        public Room(Color color, Map map, GraphicsDevice device, float gravity = DEFAULT_GRAVITY)
         {
             this.color = color;
             Gravity = gravity;
             this.map = map;
-            inkMap = new InkMap();
 
             width = map.WidthInPixels();
             height = map.HeightInPixels();
@@ -122,9 +135,12 @@ namespace Trauma.Rooms
                 }
 
             /* Step 2: Load objects from map. */
+
+            /* Player */
             MapObject playerObj = map.FindObject((layer, obj) => obj.Name == PLAYER_OBJECT_NAME);
             Add(new Player(new Vector2(playerObj.Bounds.X, playerObj.Bounds.Y)));
 
+            /* Ink Generators */
             IEnumerable<MapObject> generatorObjs = map.FindObjects((layer, obj) => obj.Type == GENERATOR_OBJECT_NAME);
             foreach (MapObject generatorObj in generatorObjs)
             {
@@ -142,7 +158,7 @@ namespace Trauma.Rooms
                 Debug.Assert(generatorObj.Properties.TryGetValue(COLOR_PROPERTY_NAME, out colorProperty),
                              "Generator with no color.");
                 Color? genColor = ColorHelper.FromString(colorProperty.RawValue);
-                Debug.Assert(genColor != null, "Invalid color was specified.");
+                Debug.Assert(genColor != null, "Invalid generator color was specified.");
 
                 int genInterval = DEFAULT_GENERATOR_INTERVAL;
                 Property intervalProperty;
@@ -157,7 +173,56 @@ namespace Trauma.Rooms
                 Add(new InkGenerator(new Vector2(genX, genY), genDirection.Value, genColor.Value, genInterval, genSpeed));
             }
 
-            // TODO: Load portal.
+            /* Portals */
+            IEnumerable<MapObject> portalObjs = map.FindObjects((layer, obj) => obj.Type == PORTAL_OBJECT_NAME);
+            foreach (MapObject portalObj in portalObjs)
+            {
+                Property colorProperty;
+                Debug.Assert(portalObj.Properties.TryGetValue(COLOR_PROPERTY_NAME, out colorProperty), "Portal found with no color.");
+                Color? portalColor = ColorHelper.FromString(colorProperty.RawValue);
+                Debug.Assert(portalColor != null, "Invalid portal color was specified.");
+
+                Vector2 portalPos = new Vector2(portalObj.Bounds.X, portalObj.Bounds.Y);
+                Vector2 portalSize = new Vector2(portalObj.Bounds.Width, portalObj.Bounds.Height);
+
+                portals.Add(new Portal(portalPos, portalSize, portalColor.Value));
+            }
+
+            /* Sections */
+            IEnumerable<MapObject> sectionObjs = map.FindObjects((layer, obj) => obj.Type == SECTION_OBJECT_NAME);
+            foreach (MapObject sectionObj in sectionObjs)
+            {
+                Property zoomProperty;
+                float zoomLevel = -1;
+                bool centered = false;
+
+                if (sectionObj.Properties.TryGetValue(ZOOM_PROPERTY_NAME, out zoomProperty))
+                    switch (zoomProperty.RawValue)
+                    {
+                        case NEAR:
+                            zoomLevel = NEAR_ZOOM_LEVEL;
+                            break;
+                        case MEDIUM:
+                            zoomLevel = MEDIUM_ZOOM_LEVEL;
+                            break;
+                        case FAR:
+                            zoomLevel = FAR_ZOOM_LEVEL;
+                            break;
+                        case CENTER:
+                            centered = true;
+                            break;
+                        default:
+                            throw new InvalidOperationException("Invalid zoom level.");
+                    }
+                if (centered)
+                    sections.Add(new Section(this, sectionObj.Bounds, centered));
+                else
+                    sections.Add(new Section(this, sectionObj.Bounds, zoomLevel));
+            }
+
+            inkMap = new InkMap(device, width, height);
+
+            GameEngine.FadeIn(FadeSpeed.Fast);
         }
 
         /// <summary>
@@ -173,6 +238,7 @@ namespace Trauma.Rooms
         /// </summary>
         public void Finish()
         {
+            GameEngine.FadeOut(Color.White, FadeSpeed.Medium);
             finished = true;
         }
 
@@ -190,7 +256,8 @@ namespace Trauma.Rooms
 
             // Update all objects in the room.
             player.Update(this, gameTime);
-            //portal.Update(this, gameTime);
+            foreach (Portal portal in portals)
+                portal.Update(this, gameTime);
             foreach (InkGenerator generator in generators)
                 generator.Update(this, gameTime);
             foreach (InkBlob blob in blobs)
@@ -198,11 +265,13 @@ namespace Trauma.Rooms
 
             // handle any collisions with the player
             BBox collision;
-            //if (portal.IsColliding(player, out collision))
-            //{
-            //    player.CollideWithObject(portal, this, collision);
-            //    portal.CollideWithObject(player, this, collision);
-            //}
+            foreach (Portal portal in portals)
+                if (portal.IsColliding(player, out collision))
+                {
+                    player.CollideWithObject(portal, this, collision);
+                    portal.CollideWithObject(player, this, collision);
+                }
+
             foreach (InkGenerator generator in generators)
                 if (generator.IsColliding(player, out collision))
                 {
@@ -216,9 +285,34 @@ namespace Trauma.Rooms
                     blob.CollideWithObject(player, this, collision);
                 }
 
+            // check to see if we entered a new section of the room
+            Section newSection = GetDeepestSection(player);
+            if (GetDeepestSection(player) != curSection)
+                ChangeSection(newSection);
             // now that we've handled all those objects, update the camera to track whatever it wants to track.
             camera.Update(this, gameTime);
             inkMap.Update();
+        }
+
+        private void ChangeSection(Section newSection)
+        {
+            if (newSection == null)
+            {
+                camera.ChangeTarget(player);
+                camera.ZoomTo(Camera.DEFAULT_ZOOM);
+            }
+            else
+            {
+
+                if (newSection.Centered)
+                    camera.ChangeTarget(newSection.Center);
+                else
+                {
+                    camera.ChangeTarget(player);
+                    camera.ZoomTo(newSection.ZoomLevel);
+                }
+            }
+            curSection = newSection;
         }
 
         /// <summary>
@@ -227,7 +321,33 @@ namespace Trauma.Rooms
         /// <param name="spriteBatch">The sprite batch.</param>
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin(SpriteSortMode.BackToFront,
+            spriteBatch.GraphicsDevice.BlendState = BlendState.AlphaBlend;
+            spriteBatch.GraphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
+            
+            spriteBatch.GraphicsDevice.SetRenderTarget(inkMap.Map);
+            if (firstDraw)
+            {
+                spriteBatch.GraphicsDevice.Clear(Color.Transparent);
+                firstDraw = false;
+            }
+
+            // flushing all the ink splatters onto the inkmap
+            spriteBatch.Begin();
+
+            foreach (Splatter splatter in splatterBuffer)
+            {
+                splatter.Draw(spriteBatch);
+            }
+
+            splatterBuffer.Clear();
+
+            spriteBatch.End();
+
+            spriteBatch.GraphicsDevice.SetRenderTarget(null);
+            spriteBatch.GraphicsDevice.Clear(Color.Transparent);
+
+            // set up everything else to be drawn relative to the camera
+            spriteBatch.Begin(SpriteSortMode.Deferred,
                               BlendState.AlphaBlend,
                               null,
                               null,
@@ -239,9 +359,11 @@ namespace Trauma.Rooms
 
             map.Draw(spriteBatch);
             inkMap.Draw(spriteBatch);
+
             foreach (InkGenerator generator in generators)
                 generator.Draw(spriteBatch);
-            //portal.Draw(spriteBatch);
+            foreach (Portal portal in portals)
+                portal.Draw(spriteBatch);
             player.Draw(spriteBatch);
             foreach (InkBlob blob in blobs)
                 blob.Draw(spriteBatch);
@@ -261,10 +383,10 @@ namespace Trauma.Rooms
                 if (obj is Player)
                 {
                     player = (Player) obj;
-                    camera = new Camera(player);
+                    camera = new Camera(player, width, height);
                 }
                 else if (obj is Portal)
-                    portal = (Portal) obj;
+                    portals.Add((Portal) obj);
                 else if (obj is InkGenerator)
                     generators.Add((InkGenerator) obj);
                 else if (obj is InkBlob)
@@ -286,7 +408,7 @@ namespace Trauma.Rooms
                 if (obj is Player)
                     player = null;
                 else if (obj is Portal)
-                    portal = null;
+                    portals.Remove((Portal) obj);
                 else if (obj is InkGenerator)
                     generators.Remove((InkGenerator) obj);
                 else if (obj is InkBlob)
@@ -440,6 +562,13 @@ namespace Trauma.Rooms
             return position == Vector2.Clamp(position, Vector2.Zero, StageBounds);
         }
 
+        /// <summary>
+        /// Makes a splatter in the room at the given 
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="size"></param>
+        /// <param name="splatColor"></param>
+        /// <param name="velocity"></param>
         public void Splat(Vector2 position, Vector2 size, Color splatColor, Vector2 velocity)
         {
             // rotate the splatter with the velocity of the angle, but don't flip vertically.
@@ -467,7 +596,19 @@ namespace Trauma.Rooms
             // it out.
             splatSize = splatSize.Balance();
 
-            inkMap.AddSplatter(splatPos, splatSize, rotation, ResourceManager.GetRandomSplatter(), splatColor);
+            Texture2D splatterTexture = ResourceManager.GetRandomSplatter();
+            splatColor.A = 150;
+            splatterBuffer.Add(new Splatter(position, size, rotation, splatterTexture, splatColor));
+        }
+
+        public Section GetDeepestSection(GameObject obj)
+        {
+            Section deepestSection = null;
+            foreach (Section section in sections)
+                if (section.Contains(obj) && (deepestSection == null || section.Area < deepestSection.Area))
+                    deepestSection = section;
+
+            return deepestSection;
         }
 
         public bool CanHaveMoreBlobs()

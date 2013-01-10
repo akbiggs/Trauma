@@ -28,22 +28,19 @@ namespace Trauma.Objects
 
         private const float JUMP_SPLATTER_SIZE = 40f;
         private const float SLIDE_SPLATTER_SIZE = 30f;
+        private const float STEP_SPLATTER_SIZE = 25f;
 
-        private const int SPLATTER_OFFSET_X = 17;
-        private const int SPLATTER_OFFSET_Y = 4;
-        private const float SPLATTER_RESIZE_X = 1.82f;
-        private const float SPLATTER_RESIZE_Y = 1.36f;
-
-        private const float MAX_SPEED_X = 6.5f;
+        private const float MAX_SPEED_X = 6f;
         private const float MAX_SPEED_Y = 30f;
 
-        private const float JUMP_SPEED = 20f;
+        private const float JUMP_SPEED = 16f;
         // minimum speed the player needs to collide with the ground to play landing animation
         private const float MIN_LAND_SPEED = 20f;
         // minimum speed the player needs to attain before we consider them as off the ground,
         // for example when they fall off a platform without jumping
         private const float MIN_FALL_SPEED = 4f;
         private const float WALL_SLIDE_FACTOR = 4f;
+        private const float WALL_JUMP_PUSH = 6f;
 
         private const float ACCELERATION_X = 1.0f;
         private const float ACCELERATION_Y = 1.5f;
@@ -81,6 +78,11 @@ namespace Trauma.Objects
         private const int LAND_NUM_FRAMES = 1;
 
         private const int FRAME_DURATION = 3;
+        
+        // how many frames the player takes a step 
+        private const int FRAMES_PER_STEP = 4;
+        private const int STEP_FRAME_OFFSET = 1;
+
         // how many update cycles the player should be forced to stay landing for
         private const int LAND_DURATION = 20;
 
@@ -200,6 +202,8 @@ namespace Trauma.Objects
             
             if (onGround && Math.Abs(Velocity.X) > 0)
                 ChangeAnimation(WALK);
+
+            rotation = Velocity.ToAngle();
         }
 
         internal override void Move(Room room, Vector2 direction)
@@ -211,6 +215,9 @@ namespace Trauma.Objects
                 facing = LEFT;
             else if (direction.X > 0)
                 facing = RIGHT;
+
+            if (TookStep)
+                room.Splat(new Vector2(box.Left, box.Bottom), STEP_SPLATTER_SIZE * Vector2.One, color, room.Gravity * Vector2.One);
 
             base.Move(room, direction);
         }
@@ -251,6 +258,10 @@ namespace Trauma.Objects
         {
             if (obj is InkBlob)
                 color = color.Combine(obj.Color);
+            if (obj is Portal)
+                if (color.Contains(obj.Color))
+                    room.Finish();
+
             base.CollideWithObject(obj, room, collision);
         }
 
@@ -272,8 +283,10 @@ namespace Trauma.Objects
         /// </summary>
         private void DoJump(Room room)
         {
-            ChangeAnimation(JUMP);
             Velocity.Y = -JUMP_SPEED;
+            if (curAnimation.IsCalled(SLIDE))
+                Velocity.X = (facing == RIGHT ? -WALL_JUMP_PUSH : WALL_JUMP_PUSH);
+            ChangeAnimation(JUMP);
             canJump = false;
             room.Splat(Position, Vector2.One * JUMP_SPLATTER_SIZE, color, Velocity);
         }
@@ -301,20 +314,23 @@ namespace Trauma.Objects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            Rectangle frameRect = curAnimation.GetFrameRect();
             spriteBatch.Draw(curAnimation.GetTexture(),
-                             new Rectangle((int) Position.X, (int) Position.Y, (int) size.X, (int) size.Y),
-                             curAnimation.GetFrameRect(), Color.White, 
+                             Center,
+                             frameRect, Color.White, 
                              0,
-                             Vector2.Zero,
+                             //ShouldBeRotated() ? rotation : 0,
+                             size/2, new Vector2(size.X / frameRect.Width, size.Y / frameRect.Height),  
                              ShouldBeFlipped() ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 
                              0);
 
             if (color != Color.Black)
                 spriteBatch.Draw(splatterAnimation.GetTexture(),
-                                 new Rectangle((int) Position.X, (int) Position.Y, (int) size.X, (int) size.Y),
-                                 curAnimation.GetFrameRect(), GetDrawColor(),
+                                 Center,
+                                 frameRect, GetDrawColor(),
                                  0,
-                                 Vector2.Zero,
+                                 //ShouldBeRotated() ? rotation : 0,
+                                 size / 2, new Vector2(size.X / frameRect.Width, size.Y / frameRect.Height),
                                  ShouldBeFlipped() ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
                                  0);
 
@@ -342,6 +358,11 @@ namespace Trauma.Objects
             if (curAnimation.IsCalled(SLIDE))
                 return facing == RIGHT;
             return facing == LEFT;
+        }
+
+        public bool TookStep
+        {
+            get { return curAnimation.CurFrameNumber%FRAMES_PER_STEP == STEP_FRAME_OFFSET; }
         }
     }
 }
