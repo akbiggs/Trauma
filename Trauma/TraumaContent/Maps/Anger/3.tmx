@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="27" height="38" tilewidth="50" tileheight="50">
+ <tileset firstgid="1" source="tiles3.tsx"/>
+ <layer name="Tiles" width="27" height="38">
+  <data encoding="base64" compression="zlib">
+   eJzlllcKAzEMRH2F9N4rpNcLpPwk7P2Pk/nIgn4iZDM2CRE8vKzB45FsYefSRgVUwQRMyWMN1IVWB3TBCqzJYw/0hdYCLD1zkYG7Mp/PzcBc/B+BcSKtmL42YJtIy5rDHdiDAziTtD75ypS12L5CtS7g+v621kvTeoCnYR8MX1r+NC2rL3lWQrVi+mLUK6UvedZ8tNj3S55RH19HcHL+fSPfJ6NeVq3YfUPT+mVfjH4o+4amxb5fob03pF5asH1ZtRj3y6r1jTm8EWC8D63BePdag/EWtUZKX/9SrxIogyEYkMacAigKrRZox7HlGqAZaW0tXlj4QwI=
+  </data>
+ </layer>
+ <objectgroup name="Objects" width="27" height="38">
+  <object name="Portal" type="Portal" x="850" y="200" width="200" height="200">
+   <properties>
+    <property name="Color" value="Red"/>
+   </properties>
+  </object>
+  <object name="Red" type="Generator" x="1100" y="1400" width="50" height="50">
+   <properties>
+    <property name="Color" value="Red"/>
+    <property name="Direction" value="Down"/>
+   </properties>
+  </object>
+  <object name="Barrier" type="Barrier" x="150" y="1400" width="50" height="50">
+   <properties>
+    <property name="Color" value="Red"/>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="1100" y="1700" width="100" height="50">
+   <properties>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Player" type="Player" x="250" y="1600" width="50" height="100"/>
+  <object name="Barrier" type="Barrier" x="200" y="1400" width="50" height="50">
+   <properties>
+    <property name="Color" value="Red"/>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Barrier" type="Barrier" x="250" y="1400" width="50" height="50">
+   <properties>
+    <property name="Color" value="Red"/>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Barrier" type="Barrier" x="300" y="1400" width="50" height="50">
+   <properties>
+    <property name="Color" value="Red"/>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Yellow Spout" type="Spout" x="800" y="1650" width="50" height="50">
+   <properties>
+    <property name="Color" value="Yellow"/>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Generator" x="300" y="400" width="50" height="50">
+   <properties>
+    <property name="Color" value="Blue"/>
+    <property name="Direction" value="Right"/>
+    <property name="Speed" value="Fast"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Generator" x="700" y="650" width="50" height="50">
+   <properties>
+    <property name="Color" value="Blue"/>
+    <property name="Direction" value="Left"/>
+    <property name="Speed" value="Fast"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Generator" x="700" y="1150" width="50" height="50">
+   <properties>
+    <property name="Color" value="Blue"/>
+    <property name="Direction" value="Left"/>
+    <property name="Speed" value="Fast"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Generator" x="300" y="900" width="50" height="50">
+   <properties>
+    <property name="Color" value="Blue"/>
+    <property name="Direction" value="Right"/>
+    <property name="Speed" value="Fast"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="1050" y="850" width="50" height="100">
+   <properties>
+    <property name="Direction" value="Left"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="1050" y="950" width="50" height="100">
+   <properties>
+    <property name="Direction" value="Left"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="750" y="550" width="50" height="100">
+   <properties>
+    <property name="Direction" value="Right"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="750" y="650" width="50" height="100">
+   <properties>
+    <property name="Direction" value="Right"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

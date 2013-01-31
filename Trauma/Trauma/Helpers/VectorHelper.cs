@@ -158,5 +158,10 @@ namespace Trauma.Helpers
         {
             return -1*vector;
         }
+
+        public static float LargestComponent(this Vector2 vector)
+        {
+            return Math.Max(vector.X, vector.Y);
+        }
     }
 }

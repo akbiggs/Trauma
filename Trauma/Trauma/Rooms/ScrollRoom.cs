@@ -18,7 +18,7 @@ namespace Trauma.Rooms
         /// Create a new scroll room from the given map.
         /// </summary>
         /// <param name="map">The map of the room.</param>
-        public ScrollRoom(Color color, Map map, GraphicsDevice device) : base(color, map, device)
+        public ScrollRoom(Color color, Map map, GraphicsDevice device) : base(RoomType.Bargain, color, map, device)
         {
         }
     }

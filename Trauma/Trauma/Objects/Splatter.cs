@@ -17,6 +17,10 @@ namespace Trauma.Objects
         #region Members
 
         private Vector2 position;
+        public Vector2 Position
+        {
+            get { return position; }
+        }
         private Vector2 size;
         private float rotation;
         private Texture2D texture;

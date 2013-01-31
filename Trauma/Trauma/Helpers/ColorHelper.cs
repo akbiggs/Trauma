@@ -19,6 +19,7 @@ namespace Trauma.Helpers
         private const string PURPLE = "Purple";
         private const string GREEN = "Green";
         private const string BLACK = "Black";
+        private const string GRAY = "Gray";
         
         #endregion
 
@@ -31,6 +32,7 @@ namespace Trauma.Helpers
         private static Color Orange = Color.DarkOrange;
         private static Color Green = Color.Green;
         private static Color Black = Color.Black;
+        private static Color Gray = Color.Gray;
         #endregion
 
         public static Color PushTowards(this Color color, Color otherColor, byte push)
@@ -78,6 +80,8 @@ namespace Trauma.Helpers
                     return Green;
                 case BLACK:
                     return Black;
+                case GRAY:
+                    return Gray;
                 default:
                     return null;
             }
@@ -92,7 +96,7 @@ namespace Trauma.Helpers
         /// <returns>True if the color is contained, false otherwise.</returns>
         public static bool Contains(this Color color, Color containedColor)
         {
-            // black is contained in every color
+            // black is contained in every color...also there's this gray color
             if (containedColor == Black)
                 return true;
 
@@ -111,7 +115,7 @@ namespace Trauma.Helpers
 
         public static Color Combine(this Color color, Color otherColor)
         {
-
+            
             // primary combinations
             if ((color == Red && otherColor == Blue) || (color == Blue && otherColor == Red))
                 return Purple;

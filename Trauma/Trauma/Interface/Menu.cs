@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Trauma.Engine;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 namespace Trauma.Interface
 {
@@ -14,9 +15,27 @@ namespace Trauma.Interface
     /// </summary>
     public class Menu : IController
     {
-        public void Draw(SpriteBatch spriteBatch)
+        List<String> options;
+        String exitOption;
+        Dictionary<String, Action> handlers;
+
+        public Menu(Dictionary<String, Action> options, String exitOption)
         {
-            throw new NotImplementedException();
+            Debug.Assert(options.Keys.Contains(exitOption), "Exit option not present in menu.");
+            this.handlers = options;
+            this.options = options.Keys.ToList<String>();
+            this.exitOption = exitOption;
+        }
+        
+        public void AddOption(String name, Action handler) 
+        {
+            Debug.Assert(!options.Contains(name), "Option already present in menu.");
+            this.options.Add(name);
+            handlers[name] = handler;
+        }
+
+        public virtual void Draw(SpriteBatch spriteBatch)
+        {
         }
 
         public virtual bool Finished
@@ -24,7 +43,7 @@ namespace Trauma.Interface
             get { throw new NotImplementedException();  }
         }
 
-        public void Finish()
+        public virtual void Finish()
         {
             throw new NotImplementedException();
         }

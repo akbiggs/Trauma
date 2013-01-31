@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="37" height="31" tilewidth="50" tileheight="50">
+ <tileset firstgid="1" source="tiles3.tsx"/>
+ <layer name="Tiles" width="37" height="31">
+  <data encoding="base64" compression="zlib">
+   eJztlUkKwkAQRVtBQUHBeZ6HCM7jDbz/lfyb2hRi+sd00w4fHp1FLSqvOilj3KUBmkR9C7Qd9SIZgCHYgp3FOQJjxz3NwJyoj8DKUS+SNdgQ9XtwcNSLJERPbE8+PLGz83mfjuAEzuACruD2pF48yT9kAZYpnfKcA3niHcQT+w+xOeW5BMpET+KJvYdpRmYqsxRP7D10mRA86YTgSc/u78kuPj1lQBZMwPTFWQFV48dTARQt6jqga/x4YndrEk/6e9G5K9jd+i2e2PjwFDc7nV/1xMaFJ3ZWOiF6YnvycZ/Y2dVA3cTvondO2WO26YE+UZ8kssc+OQ97qiUD
+  </data>
+ </layer>
+ <objectgroup name="Objects" width="37" height="31">
+  <object name="Purple Portal" type="Portal" x="1250" y="100" width="250" height="250">
+   <properties>
+    <property name="Color" value="Purple"/>
+   </properties>
+  </object>
+  <object name="Purple" type="Generator" x="1100" y="500" width="50" height="50">
+   <properties>
+    <property name="Color" value="Purple"/>
+    <property name="Direction" value="Down"/>
+   </properties>
+  </object>
+  <object name="Player" type="Player" x="250" y="1300" width="50" height="100"/>
+ </objectgroup>
+</map>

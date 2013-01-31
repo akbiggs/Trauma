@@ -15,17 +15,25 @@ namespace Trauma.Objects
     public class GameObject
     {
         #region Constants
-        private const float COLLISION_FORGIVENESS_FACTOR = 0.1f;
+        private const float COLLISION_FORGIVENESS_FACTOR = 0.5f;
+        private const float SPOUT_CFF = 0.001f;
+
+        private const float BBOX_OFFSET_X = 0.2f;
+        private const float BBOX_OFFSET_Y = 0f;
         #endregion
 
         #region Members
 
         protected readonly List<AnimationSet> animations;
-        private readonly Vector2 deceleration;
-        private readonly Vector2 maxSpeed;
+        protected Vector2 deceleration;
+        protected Vector2 maxSpeed;
 
         protected float rotation;
-        protected Vector2 Velocity;
+        protected Vector2 velocity;
+        public Vector2 Velocity
+        {
+            get { return velocity; }
+        }
 
         private Vector2 acceleration;
         protected BBox box;
@@ -41,14 +49,22 @@ namespace Trauma.Objects
             get { return color; }
         }
 
+        // TODO: Refactor this, very bad
+        public Direction Facing = Direction.None;
+
         protected virtual AnimationSet curAnimation { get; set; }
         private bool hasMoved;
         protected bool hasCollidedWithWall;
-
+        protected bool hasCollidedWithCeiling = false;
         private Vector2 maxPosition;
         private Vector2 minPosition;
-        private Vector2 position;
+        protected Vector2 position;
+
         protected Vector2 size;
+        public Vector2 Size
+        {
+            get { return size; }
+        }
 
         public Vector2 Position
         {
@@ -56,13 +72,23 @@ namespace Trauma.Objects
             set
             {
                 position = value;
-                box.Position = value;
+                box.Position = value + BoxOffset;
             }
         }
 
         public Vector2 Center
         {
-            get { return Position + size / 2; }
+            get { return Position + Size / 2; }
+        }
+
+        public virtual Vector2 BoxOffset
+        {
+            get { return new Vector2(BBOX_OFFSET_X*Size.X, BBOX_OFFSET_Y*Size.Y);}
+        }
+
+        public virtual bool IsCollidable
+        {
+            get { return true; }
         }
 
         #endregion
@@ -88,13 +114,13 @@ namespace Trauma.Objects
                           String startAnimationName, float rotation)
         {
             this.position = position;
-            Velocity = initialVelocity;
+            velocity = initialVelocity;
             this.maxSpeed = maxSpeed;
             this.acceleration = acceleration;
             this.deceleration = deceleration;
             this.color = color;
             this.colorable = colorable;
-            Debug.Assert(size.X > 0 && size.Y > 0, "Invalid object size.");
+            Debug.Assert(size.X >= 0 && size.Y >= 0, "Invalid object size.");
             this.size = size;
 
             this.animations = animations;
@@ -103,7 +129,8 @@ namespace Trauma.Objects
 
             this.rotation = rotation;
 
-            box = new BBox(new Rectangle((int) position.X, (int) position.Y, (int) size.X, (int) size.Y));
+            box = new BBox((int)(Position.X + BBOX_OFFSET_X*Size.X), (int)(Position.Y + BBOX_OFFSET_Y*Size.Y),
+                (int)((1 - 2 * BBOX_OFFSET_X)*Size.X), (int)((1-2*BBOX_OFFSET_Y)*Size.Y));
         }
 
         /// <summary>
@@ -139,6 +166,11 @@ namespace Trauma.Objects
         public virtual void Update(Room room, GameTime gameTime)
         {
             hasCollidedWithWall = false;
+            if (velocity.Y > 0 && hasCollidedWithCeiling)
+            {
+                hasCollidedWithCeiling = false;
+                Console.WriteLine("Done ceiling colliding!");
+            }
             curAnimation.Update();
         }
 
@@ -174,11 +206,18 @@ namespace Trauma.Objects
         /// <returns>True if the objects are colliding, false otherwise.</returns>
         public virtual bool IsColliding(GameObject obj, out BBox collisionRegion)
         {
+            float collisionForgiveness = (this is Spout || obj is Spout) ? SPOUT_CFF : COLLISION_FORGIVENESS_FACTOR;
             collisionRegion = box.Intersect(obj.box);
+            
+            // only do forgiveness on the smaller box, a small enough box might not even be allowed
+            // to collide on the larger box if we don't care
+            BBox smallerBox = BBox.SmallerOf(box, obj.box);
 
             // because boxes are cruel, and not very true to the shape of the objects, only return true
             // if the area of collision is larger than we're willing to forgive.
-            return collisionRegion != null && !collisionRegion.IsEmpty() && collisionRegion.Area >= box.Area * COLLISION_FORGIVENESS_FACTOR;
+            return collisionRegion != null && 
+                !collisionRegion.IsEmpty() &&
+                collisionRegion.Area >= smallerBox.Area * collisionForgiveness;
         }
 
         public virtual void CollideWithObject(GameObject obj, Room room, BBox collision)
@@ -200,15 +239,16 @@ namespace Trauma.Objects
         /// <param name="room">The room containing the ground.</param>
         public virtual void CollideWithGround(Room room)
         {
+            velocity.Y = 0;
         }
 
         /// <summary>
         ///     Applies gravity to the object.
         /// </summary>
         /// <param name="room">The room that the object is in.</param>
-        private void ApplyGravity(Room room)
+        protected virtual void ApplyGravity(Room room)
         {
-            Velocity.Y += room.Gravity;
+            velocity.Y += room.Gravity;
         }
 
         /// <summary>
@@ -221,46 +261,69 @@ namespace Trauma.Objects
             // let gravity handle decelleration on the y-axis.
             if (Math.Abs(change.X - 0) < float.Epsilon)
                 Decellerate();
-            Velocity = Vector2.Clamp(Velocity += change, -maxSpeed, maxSpeed);
+            velocity = Vector2.Clamp(velocity += change, -maxSpeed, maxSpeed);
         }
 
         private void Decellerate()
         {
-            Velocity = Velocity.PushBack(deceleration);
+            velocity = velocity.PushBack(deceleration);
         }
 
         private void UpdateBounds(Room room)
         {
-            minPosition = room.GetMinPosition(box.Position, box.Size);
-            maxPosition = room.GetMaxPosition(box.Position, box.Size);
+            minPosition = room.GetMinPosition(box.Position, box.Size, color);
+            maxPosition = room.GetMaxPosition(box.Position, box.Size, color);
         }
 
         private void ChangeXPosition(Room room)
         {
             // check for colliding against a wall
-            if (Position.X + Velocity.X < minPosition.X || Position.X + Velocity.X > maxPosition.X)
+            if (Box.Position.X + velocity.X < minPosition.X || Box.Position.X + velocity.X > maxPosition.X)
                 CollideWithWall(room);
-            Position = new Vector2(MathHelper.Clamp(Position.X + Velocity.X, minPosition.X, maxPosition.X), Position.Y);
+            Position = new Vector2(MathHelper.Clamp(Box.Position.X + velocity.X, minPosition.X, maxPosition.X) - BoxOffset.X, Position.Y);
         }
 
         private void ChangeYPosition(Room room)
         {
             bool shouldCollideWithGround = false;
+            bool shouldCollideWithCeiling = false;
 
             // check for colliding against a wall
-            if (Position.Y + Velocity.Y < minPosition.Y)
-                CollideWithWall(room);
-            else if (Position.Y + Velocity.Y > maxPosition.Y)
+            if (Box.Position.Y + velocity.Y < minPosition.Y)
+                shouldCollideWithCeiling = true;
+            
+            else if (Box.Position.Y + velocity.Y > maxPosition.Y)
             {
-                CollideWithWall(room);
+                // if we're falling off-stage, die
+                if (maxPosition.Y + Box.Height*2 >= room.Height)
+                {
+                    room.Remove(this);
+                    return;
+                }
+
                 // handle the ground collision after we've moved, to prevent weirdness when player is moving too fast
                 shouldCollideWithGround = true;
             }
 
-            Position = new Vector2(Position.X, MathHelper.Clamp(position.Y + Velocity.Y, minPosition.Y, maxPosition.Y));
+            Position = new Vector2(Position.X, MathHelper.Clamp(Box.Position.Y + velocity.Y, minPosition.Y, maxPosition.Y) + BoxOffset.Y);
 
             if (shouldCollideWithGround)
+            {
+                CollideWithWall(room);
                 CollideWithGround(room);
+            }
+            if (shouldCollideWithCeiling)
+            {
+                hasCollidedWithCeiling = true;
+                CollideWithWall(room);
+                CollideWithCeiling(room);
+            }
+        }
+
+        protected virtual void CollideWithCeiling(Room room)
+        {
+            hasCollidedWithCeiling = true;
+
         }
 
         /// <summary>

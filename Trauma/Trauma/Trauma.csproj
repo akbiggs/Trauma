@@ -29,7 +29,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>7</ApplicationRevision>
+    <ApplicationRevision>12</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -101,17 +101,26 @@
     <Compile Include="Interface\Credits.cs" />
     <Compile Include="Interface\Dialogue.cs" />
     <Compile Include="Interface\GameMenu.cs" />
+    <Compile Include="Interface\Icon.cs" />
     <Compile Include="Interface\Intro.cs" />
     <Compile Include="Interface\MainMenu.cs" />
     <Compile Include="Interface\Menu.cs" />
+    <Compile Include="Interface\MiniMap.cs" />
     <Compile Include="Interface\TitleScreen.cs" />
+    <Compile Include="Interface\Toolbar.cs" />
+    <Compile Include="Objects\Barrier.cs" />
     <Compile Include="Objects\GameObject.cs" />
     <Compile Include="Objects\InkBlob.cs" />
     <Compile Include="Objects\InkGenerator.cs" />
     <Compile Include="Objects\Player.cs" />
     <Compile Include="Objects\Portal.cs" />
     <Compile Include="Objects\Splatter.cs" />
+    <Compile Include="Objects\Spout.cs" />
+    <Compile Include="Objects\SpoutGenerator.cs" />
     <Compile Include="Objects\WaterBlob.cs" />
+    <Compile Include="Objects\WaterGenerator.cs" />
+    <Compile Include="Objects\Wave.cs" />
+    <Compile Include="Objects\WaveGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Engine\Program.cs" />
     <Compile Include="Engine\GameEngine.cs" />
@@ -120,6 +129,7 @@
     <Compile Include="Rooms\Room.cs" />
     <Compile Include="Rooms\ScrollRoom.cs" />
     <Compile Include="Rooms\Section.cs" />
+    <Compile Include="Objects\Spike.cs" />
     <Compile Include="Rooms\Tile.cs" />
   </ItemGroup>
   <ItemGroup>

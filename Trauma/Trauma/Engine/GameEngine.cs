@@ -20,13 +20,18 @@ namespace Trauma.Engine
         public static GraphicsDeviceManager graphics;
         public static SpriteBatch spriteBatch;
 
+        public static float ScreenWidth
+        {
+            get { return spriteBatch.GraphicsDevice.Viewport.Width; }
+        }
+
         /// <summary>
         /// All of the rooms in the game, in order.
         /// </summary>
         List<String> roomNames = new List<String>
             {
-                "Intro_1",
-                "Intro_3"
+                "Denial_1",
+                "Anger_3",
             };
 
         Intro intro;
@@ -60,6 +65,7 @@ namespace Trauma.Engine
             graphics.PreferredBackBufferWidth = width;
             graphics.PreferredBackBufferHeight = height;
             graphics.PreferMultiSampling = false;
+            IsMouseVisible = true;
         }
 
         /// <summary>
@@ -85,6 +91,7 @@ namespace Trauma.Engine
 
             // Load content from managers
             ResourceManager.LoadTextures(Content);
+            ResourceManager.LoadFonts(Content);
             ResourceManager.LoadSounds(Content);
 
             // Initialize anything depending on loaded content.
@@ -128,7 +135,15 @@ namespace Trauma.Engine
                 }
 
                 if (controller is Room && controller.Finished)
+                {
+                    Room oldRoom = curRoom;
                     controller = curRoom = NextRoom();
+                    if (oldRoom == null || curRoom.Type != oldRoom.Type)
+                    {
+                        ResourceManager.Stop();
+                        curRoom.ShouldPlayMusic = true;
+                    }
+                }
                 if (controller != null)
                     controller.Update(gameTime);
             } else 
@@ -156,7 +171,14 @@ namespace Trauma.Engine
                     controller = titleScreen;
                     break;
                 case GameState.Room:
+                    Room oldRoom = curRoom;
                     curRoom = NextRoom();
+                    if (oldRoom == null || curRoom.Type != oldRoom.Type)
+                    {
+                        ResourceManager.Stop();
+                        curRoom.ShouldPlayMusic = true;
+                    }
+
                     controller = curRoom;
                     break;
                 case GameState.GameMenu:
@@ -177,12 +199,35 @@ namespace Trauma.Engine
         /// <returns>The next room(level) of the game.</returns>
         private Room NextRoom()
         {
+            if (curRoom != null && curRoom.Failed)
+                return new Room(curRoom.Type, curRoom.Color, curRoom.Map, GraphicsDevice);
+
             if (!MoreLevels())
                 throw new InvalidOperationException();
-            
-            return new Room(Color.Black, ResourceManager.LoadMap(roomNames.Pop(), Content), GraphicsDevice);
+
+            String nextRoomName = roomNames.Pop();
+            return new Room(GetRoomType(nextRoomName), Color.Black, ResourceManager.LoadMap(nextRoomName, Content), GraphicsDevice);
         }
 
+        private RoomType GetRoomType(String roomName)
+        {
+            switch (roomName.Split('_')[0])
+            {
+                case "Denial":
+                    return RoomType.Denial;
+                case "Bargain":
+                    return RoomType.Bargain;
+                case "Anger":
+                    return RoomType.Anger;
+                case "Acceptance":
+                    return RoomType.Acceptance;
+                case "Depression":
+                    return RoomType.Depression;
+
+                default:
+                    throw new InvalidOperationException("Invalid room name.");
+            }
+        }
         /// <summary>
         /// Get the next state the game should be in.
         /// </summary>
@@ -205,7 +250,7 @@ namespace Trauma.Engine
                     case GameState.Room:
                         if (curRoom.MenuRequested)
                             return GameState.GameMenu;
-                        if (curRoom.Finished && !MoreLevels())
+                        if (curRoom.Finished && !curRoom.Failed && !MoreLevels())
                             return GameState.Credits;
                         break;
 
@@ -275,6 +320,25 @@ namespace Trauma.Engine
         {
             return roomNames.Count > 0;
         }
+
+        public static String GetTypeName(RoomType type)
+        {
+            switch (type)
+            {
+                case RoomType.Acceptance:
+                    return "Acceptance";
+                case RoomType.Anger:
+                    return "Anger";
+                case RoomType.Bargain:
+                    return "Bargain";
+                case RoomType.Denial:
+                    return "Denial";
+                case RoomType.Depression:
+                    return "Depression";
+                default:
+                    throw new InvalidOperationException("Invalid room type.");
+            }
+        }
     }
 
     enum GameState
@@ -290,7 +354,7 @@ namespace Trauma.Engine
     public enum FadeSpeed
     {
         Slow = 1,
-        Medium = 2,
-        Fast = 3
+        Medium = 3,
+        Fast = 5
     }
 }

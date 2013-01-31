@@ -34,39 +34,67 @@ namespace Trauma.Engine
 
         private static readonly List<String> playerTexNames = new List<String>
             {
-                "Idle",
-                "Idle_Splatter",
                 "Main",
                 "Main_Splatter",
-                "Walk",
-                "Jump",
-                "Land"
+                "Icon"
             };
         static readonly List<String> portalTexNames = new List<String>
             {
                 "Spin1",
                 "Spin2",
                 "Spin3",
-                "Spin4"
+                "Spin4",
+                "Symbol1_Anger",
+                "Symbol2_Anger",
+                "Symbol3_Anger",
+                "Symbol4_Anger",
+                "Symbol1_Depression",
+                "Symbol2_Depression",
+                "Symbol4_Depression",
+                "Icon"
             };
 
         private static readonly List<String> splatterTexNames = new List<String>
             {
                 "1",
-                "2"
+                "2",
+                "3",
+                "4"
             };
-        static readonly List<String> blobTexNames = new List<String>();
+        static readonly List<String> blobTexNames = new List<String>
+            {
+                "Main",
+                "Main_Black",
+                "Main_Water"
+            };
         private static readonly List<String> generatorTexNames = new List<string>
             {
-                "Drip"
+                "Icon",
+                "Drip",
+                "Drip_Black",
+                "Drip_Water",
+                "Wave",
+                "Wave_Water",
+                "Wave_Black",
+                "Spout",
+                "Spout_Water",
+                "Spout_Black"
             }; 
         static readonly List<String> backgroundTexNames = new List<string>
             {
-                "Intro"
+                "Intro",
+                "Denial",
+                "Depression",
+                "Anger"
             }; 
         static readonly List<String> miscTexNames = new List<String>
             {
-                "Pixel"
+                "Pixel",
+                "UndoIcon",
+                "Navigation",
+                "Toolbar",
+                "Spikes",
+                "Barrier"
             };
 
         /* Maps each path to a list of textures. */
@@ -117,6 +145,29 @@ namespace Trauma.Engine
 
         #endregion
 
+        #region Fonts
+        const string FONT_DIR_NAME = "Fonts";
+
+        static List<String> fontNames = new List<String> {
+            "Credits"
+        };
+
+        static Dictionary<String, SpriteFont> fontDic = new Dictionary<string,SpriteFont>();
+
+        public static void LoadFonts(ContentManager content) 
+        {
+            foreach (String fontName in fontNames) 
+            {
+                fontDic[fontName] = content.Load<SpriteFont>(FONT_DIR_NAME + DIR_SEPARATOR + fontName);
+            }        
+        }
+
+        public static SpriteFont GetFont(String name) 
+        {
+            return fontDic[name];
+        }
+
+        #endregion
         #region Sounds
         /* Main sound directory. */
         const string SOUND_DIR_NAME = "Sounds";
@@ -127,7 +178,15 @@ namespace Trauma.Engine
 
         static Dictionary<String, Song> soundDic = new Dictionary<string, Song>();
 
-        static readonly List<String> musicNames = new List<String>();
+        static readonly List<String> musicNames = new List<String>
+        {
+            "Anger",
+            "Acceptance",
+            "Bargain",
+            "Depression",
+            "Denial", 
+        };
+
         static readonly List<String> effectNames = new List<String>();
 
         static readonly Dictionary<String, List<String>> soundPathDic = new Dictionary<string, List<string>> 
@@ -140,7 +199,7 @@ namespace Trauma.Engine
         {
             foreach (String path in soundPathDic.Keys)
                 foreach (String name in soundPathDic[path])
-                    soundDic[path + NAME_SEPARATOR + name] =
+                    soundDic[name] =
                         Content.Load<Song>(SOUND_DIR_NAME + DIR_SEPARATOR + path + DIR_SEPARATOR + name);
         }
 
@@ -153,6 +212,16 @@ namespace Trauma.Engine
         public static Song GetSound(String name)
         {
             return soundDic[name];
+        }
+
+        public static void PlaySong(String name)
+        {
+            MediaPlayer.Play(soundDic[name]);
+        }
+
+        public static void Stop()
+        {
+            MediaPlayer.Stop();
         }
         #endregion
 
@@ -168,25 +237,6 @@ namespace Trauma.Engine
         const string BARGAIN_DIR_NAME = "Bargain";
         const string DEPRESSION_DIR_NAME = "Depression";
         const string ACCEPTANCE_DIR_NAME = "Acceptance";
-
-        /* Map names. */
-        static readonly List<String> introMapNames = new List<String>();
-        static readonly List<String> denialMapNames = new List<String>();
-        static readonly List<String> angerMapNames = new List<String>();
-        static readonly List<String> bargainMapNames = new List<String>();
-        static readonly List<String> depressionMapNames = new List<String>();
-        static readonly List<String> acceptanceMapNames = new List<String>();
-
-        /* Maps lists of map names to directory paths. */
-        static Dictionary<String, List<String>> mapPathDic = new Dictionary<string, List<string>>
-        {
-            { INTRO_DIR_NAME, introMapNames },
-            { DENIAL_DIR_NAME, denialMapNames },
-            { ANGER_DIR_NAME, angerMapNames },
-            { BARGAIN_DIR_NAME, bargainMapNames },
-            { DEPRESSION_DIR_NAME, depressionMapNames },
-            { ACCEPTANCE_DIR_NAME, acceptanceMapNames }
-        };
 
         // it would be really wasteful to have all the maps loaded into memory
         // at once, so instead only allow for individual maps to be requested.

@@ -14,10 +14,12 @@ namespace Trauma.Rooms
     public class Background
     {
         private int width, height;
-        public Background(int width, int height)
+        private RoomType type;
+        public Background(RoomType type, int width, int height)
         {
             this.width = width;
             this.height = height;
+            this.type = type;
         }
         /// <summary>
         /// Updates the background.
@@ -33,8 +35,28 @@ namespace Trauma.Rooms
         /// <param name="spriteBatch">The sprite batch.</param>
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(ResourceManager.GetTexture("Background_Intro"), new Rectangle(0, 0, width, height), null, Color.Red, 0,
+            String typeName = GetTypeName(type);
+            spriteBatch.Draw(ResourceManager.GetTexture("Background_" + typeName), new Rectangle(0, 0, width, height), null, Color.White, 0,
                 Vector2.Zero, SpriteEffects.None, 1);
+        }
+
+        private String GetTypeName(RoomType type)
+        {
+            switch (type)
+            {
+                case RoomType.Acceptance:
+                    return "Acceptance";
+                case RoomType.Anger:
+                    return "Anger";
+                case RoomType.Bargain:
+                    return "Bargain";
+                case RoomType.Denial:
+                    return "Denial";
+                case RoomType.Depression:
+                    return "Depression";
+                default:
+                    throw new InvalidOperationException("Invalid room type.");
+            }
         }
     }
 }

@@ -15,9 +15,15 @@ namespace Trauma.Interface
     public class TitleScreen : IController
     {
         private bool finished;
+        private MainMenu mainMenu;
 
+        public TitleScreen()
+        {
+            mainMenu = new MainMenu();
+        }
         public void Draw(SpriteBatch spriteBatch)
         {
+            mainMenu.Draw(spriteBatch);
         }
 
         public bool Finished

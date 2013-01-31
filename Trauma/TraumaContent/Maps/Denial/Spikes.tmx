@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="40" height="40" tilewidth="50" tileheight="50">
+ <tileset firstgid="1" source="Main.tsx"/>
+ <tileset firstgid="81" source="Main.tsx"/>
+ <layer name="Tiles" width="40" height="40">
+  <data encoding="base64" compression="zlib">
+   eJzt1YtKAkEUxnG11C5qvoLmLbXM64toJpTWKxQoKCho2XP3X1hhWFzkgLMreD748cEy7IxzwI1ENBqNRqPRnFLW2OAHv0foLf4C/QUaJ7s5Bn3/Ye17CokihhzyRl/g0tKeTbTQRsfoLnqetde4wQOqRt8i5Vnr9z9gc65lVPY8v0fB0p6SNPC853kNdUt7SuYrub8w5hvG/UmSxBWKKBkdR8LSnpL53iGLRzwZnUbGszaM+QYZ/b4dJ37fLEkfWvOFb7f7GAjO5/fNkvShNXMs3H7Du+B8rxhhipnbtjjvf8FQcL4PfGKJldu2OO8fYyI4n0aj0ZxT/gFLclCi
+  </data>
+ </layer>
+ <objectgroup name="Objects" width="40" height="40">
+  <object name="Spike1" type="Spikes" x="750" y="800" width="350" height="50">
+   <properties>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Spike2" type="Spikes" x="1100" y="850" width="50" height="350">
+   <properties>
+    <property name="Direction" value="Right"/>
+   </properties>
+  </object>
+  <object name="Spike3" type="Spikes" x="700" y="1250" width="350" height="50">
+   <properties>
+    <property name="Direction" value="Down"/>
+   </properties>
+  </object>
+  <object name="Spike4" type="Spikes" x="650" y="900" width="50" height="350">
+   <properties>
+    <property name="Direction" value="Left"/>
+   </properties>
+  </object>
+  <object name="Player" type="Player" x="200" y="1350" width="50" height="50"/>
+  <object name="Portal" type="Portal" x="700" y="100" width="400" height="400">
+   <properties>
+    <property name="Color" value="Red"/>
+   </properties>
+  </object>
+  <object name="GenLeft" type="Generator" x="450" y="550" width="50" height="50">
+   <properties>
+    <property name="Color" value="Red"/>
+    <property name="Direction" value="Up"/>
+    <property name="Interval" value="Slow"/>
+    <property name="Speed" value="Fast"/>
+   </properties>
+  </object>
+  <object name="GenRight" type="Generator" x="1300" y="550" width="50" height="50">
+   <properties>
+    <property name="Color" value="Water"/>
+    <property name="Direction" value="Up"/>
+    <property name="Interval" value="Slow"/>
+    <property name="Speed" value="Fast"/>
+   </properties>
+  </object>
+  <object name="MainSection" type="Section" x="0" y="0" width="2000" height="2000">
+   <properties>
+    <property name="Zoom" value="Far"/>
+   </properties>
+  </object>
+  <object name="WaveGen1" type="Wave" x="300" y="1250" width="150" height="150">
+   <properties>
+    <property name="Color" value="Water"/>
+    <property name="Direction" value="Right"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Spout" x="400" y="1350" width="50" height="50">
+   <properties>
+    <property name="Color" value="Red"/>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

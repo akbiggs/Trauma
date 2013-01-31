@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="33" height="28" tilewidth="50" tileheight="50">
+ <tileset firstgid="1" source="tiles3.tsx"/>
+ <layer name="Tiles" width="33" height="28">
+  <data encoding="base64" compression="zlib">
+   eJzt09cKwjAYhuE4Thwn7r0nuOcNiEfq/d+Ob0kKUmqVJtUq/eAhxUD589WUhBAllDHGyPDqtVdBVci00MYSC8Or114HXTXDAEPx+UwwDdEMM8y/MMMKa/Uc9SAT1h5OOAfsVQ8XXHUP+iLR/0Em6kHm3R42OAY0wy/1oBvrjt+E+z136+Eg3uvd1PeJ7oWM6R78fJ9/7MFPguohhjgSSHrs95BDXv1usocU0sggiy122At59+19KzXU1XMBRfTVfDqrfTb7nc/2nWmgqVuA42zP3vl49jDlDhUtJ7k=
+  </data>
+ </layer>
+ <objectgroup name="Objects" width="33" height="28">
+  <object name="Player" type="Player" x="1450" y="1000" width="50" height="100"/>
+  <object name="Blue" type="Generator" x="1250" y="800" width="50" height="50">
+   <properties>
+    <property name="Color" value="Blue"/>
+    <property name="Direction" value="Down"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="1300" y="1150" width="100" height="50">
+   <properties>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="1200" y="1150" width="100" height="50">
+   <properties>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="900" y="1200" width="100" height="50">
+   <properties>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="800" y="1200" width="100" height="50">
+   <properties>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="700" y="1200" width="100" height="50">
+   <properties>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="600" y="1200" width="100" height="50">
+   <properties>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="500" y="1200" width="100" height="50">
+   <properties>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="300" y="1200" width="100" height="50">
+   <properties>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="400" y="1200" width="100" height="50">
+   <properties>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="200" y="1200" width="100" height="50">
+   <properties>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="100" y="1200" width="100" height="50">
+   <properties>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Portal" type="Portal" x="1300" y="150" width="200" height="200">
+   <properties>
+    <property name="Color" value="Purple"/>
+   </properties>
+  </object>
+  <object name="Red" type="Generator" x="1050" y="50" width="50" height="50">
+   <properties>
+    <property name="Color" value="Red"/>
+    <property name="Direction" value="Down"/>
+   </properties>
+  </object>
+  <object name="Yellow" type="Generator" x="350" y="450" width="50" height="50">
+   <properties>
+    <property name="Color" value="Yellow"/>
+    <property name="Direction" value="Down"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="1050" y="350" width="100" height="50">
+   <properties>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

@@ -20,7 +20,7 @@ namespace Trauma.Engine
     {
         #region Constants
 
-        public const float DEFAULT_ZOOM = 1.25f;
+        
         private const float ZOOM_SPEED = 0.05f;
         private const float MIN_ZOOM = 0.1f;
         private const float PAN_SPEED = 20f;
@@ -53,9 +53,10 @@ namespace Trauma.Engine
         /// out of bounds.</param>
         /// <param name="roomHeight">The height of the room this camera resides in. Used to prevent the camera from looking
         /// out of bounds.</param>
-        public Camera(GameObject target, int roomWidth, int roomHeight)
+        /// <param name="zoomLevel">The zoom level of the camera.</param>
+        public Camera(GameObject target, int roomWidth, int roomHeight, float zoomLevel)
         {
-            Zoom = DEFAULT_ZOOM;
+            Zoom = zoomLevel;
             Rotation = 0.0f;
             position = target.Position;
             this.target = target;
@@ -121,7 +122,6 @@ namespace Trauma.Engine
             this.target = null;
             targetPosition = target;
             Pan(targetPosition);
-            ZoomTo(DEFAULT_ZOOM);
         }
 
         public void Pan(Vector2 newPosition)

@@ -10,7 +10,7 @@ namespace Trauma.Rooms
     /// <summary>
     /// A tile of the room.
     /// Can be solid, passable on the underside, or transparent.
-    /// </summary>
+    /// </summaryx>
     public class Tile
     {
         private const string TYPE_PROPERTY_NAME = "Type";
@@ -25,23 +25,35 @@ namespace Trauma.Rooms
         {
             get { return type; }
         }
+        public Color Color;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Tile" /> class.
         /// </summary>
         /// <param name="tile">The tile this is based off of.</param>
-        public Tile(Vector2 pos, Vector2 size, TiledLib.Tile tile)
+        public Tile(Vector2 pos, Vector2 size, TiledLib.Tile tile, Color color)
         {
             position = pos;
             this.size = size;
+            Color = color;
 
             // get the tile type from its properties in the map
             Property tiletype;
-            if (tile == null || !tile.Properties.TryGetValue(TYPE_PROPERTY_NAME, out tiletype))
-                // TODO: Make this throw an error when we have the actual tileset.
+            if (tile == null)
                 type = TileType.Transparent;
+            else if (!tile.Properties.TryGetValue(TYPE_PROPERTY_NAME, out tiletype))
+                // TODO: Make this throw an error when we have the actual tileset.
+                type = TileType.Solid;
             else
                 type = GetTypeByProperty(tiletype);
+        }
+
+        public Tile(Vector2 pos, Vector2 size, TileType type, Color color)
+        {
+            position = pos;
+            this.size = size;
+            Color = color;
+            this.type = type;
         }
 
         public Vector2 Position

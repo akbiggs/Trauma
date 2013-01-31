@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Trauma.Engine
 {
@@ -75,6 +76,10 @@ namespace Trauma.Engine
             get { return box; }
         }
 
+        public static BBox SmallerOf(BBox box1, BBox box2)
+        {
+            return box1.Area < box2.Area ? box1 : box2;
+        }
         public BBox Intersect(BBox other)
         {
             Rectangle intersection = Rectangle.Intersect(box, other.Rectangle);
@@ -87,6 +92,16 @@ namespace Trauma.Engine
         public bool IsEmpty()
         {
             return box.IsEmpty;
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(ResourceManager.GetTexture("Misc_Pixel"), Rectangle, new Color(255, 0, 0, 125));
+        }
+
+        public Vector2 Center 
+        {
+            get { return new Vector2(Position.X + Size.X / 2, Position.Y + Size.Y / 2); }
         }
     }
 }

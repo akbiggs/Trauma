@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TiledLib;
+using Trauma.Objects;
 
 namespace Trauma.Rooms
 {
@@ -14,12 +15,14 @@ namespace Trauma.Rooms
     /// </summary>
     public class DenialRoom : Room
     {
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DenialRoom" /> class.
         /// </summary>
         /// <param name="map">The map this room is based off of.</param>
-        public DenialRoom(Color color, Map map, GraphicsDevice device) : base(color, map, device)
+        public DenialRoom(Color color, Map map, GraphicsDevice device) : base(RoomType.Denial, color, map, device)
         {
+            
         }
     }
 }
