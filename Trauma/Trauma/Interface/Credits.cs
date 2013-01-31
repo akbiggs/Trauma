@@ -38,10 +38,20 @@ namespace Trauma.Interface
             spriteBatch.DrawString(creditsFont, drawnBy,
                 new Vector2((spriteBatch.GraphicsDevice.Viewport.Width / 2) - measurements.X / 2, 200), Color.Gray);
 
+            String musicBy = "Music By: Kevin MacLeod (http://incompetech.com/)";
+            measurements = creditsFont.MeasureString(musicBy);
+            spriteBatch.DrawString(creditsFont, musicBy,
+                new Vector2((spriteBatch.GraphicsDevice.Viewport.Width / 2) - measurements.X / 2, 300), Color.Gray);
+
+            String utgddc = "Created for the UTGDDC's GMD competition!";
+            measurements = creditsFont.MeasureString(utgddc);
+            spriteBatch.DrawString(creditsFont, utgddc,
+               new Vector2((spriteBatch.GraphicsDevice.Viewport.Width / 2) - measurements.X / 2, 400), Color.Gray);
+
             String thanks = "Thanks for playing!";
             measurements = creditsFont.MeasureString(thanks);
             spriteBatch.DrawString(creditsFont, thanks,
-                new Vector2((spriteBatch.GraphicsDevice.Viewport.Width / 2) - measurements.X / 2, 400), Color.Gray);
+                new Vector2((spriteBatch.GraphicsDevice.Viewport.Width / 2) - measurements.X / 2, 500), Color.Gray);
 
             spriteBatch.End();
         }

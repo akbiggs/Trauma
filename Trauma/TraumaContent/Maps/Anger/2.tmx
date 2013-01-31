@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="19" height="40" tilewidth="50" tileheight="50">
+<map version="1.0" orientation="orthogonal" width="17" height="40" tilewidth="50" tileheight="50">
  <tileset firstgid="1" source="tiles3.tsx"/>
- <layer name="Tiles" width="19" height="40">
+ <layer name="Tiles" width="17" height="40">
   <data encoding="base64" compression="zlib">
-   eJztk1kKwjAURbsF53m2KmhVnDZg9Udx/8vxCCk8MJhBP9raB4eXlOZy0jRB8NuqQR1CmClCQ0/GDWiKrB70IYK1ItJ03bMBDEXWElaee9rAVswnMPXMmsPiT70uihh2sIeDGifzI5zgrN41eV0tfB4GL5+svHq9vnts4XWDu6WTyctlfyYv16wseskz+tbLxk2edV7/+7R6Ffcx/V7FfXzPyopXBaowgrFjL0FZZHWga+Giqxa0Pdd+qicPijLI
+   eJztktkKwjAQRfML7vtuVdC66w9ofVH8/8/xPCQ4FJumuBChFw5JG3LnZhillKpAFQKYaIKE1exrUFdPdaALISw1YWyN/+tBX3iMYKyyaQoz8T2HRUaPFaw9zhHBGTawhR3s4QBHOOnzKCXHxVL7Ls5t/XD1+EaOT7/F9O2VrnDTe9tbZK2kLGk5XD3+IYfsW1yy377OmI858jnN5/QfcvxiTo3emQ8jX3NID9uc2jxKUIYBDB3XAhSFRwvaDrWlGtDMeMemB7JfOXw=
   </data>
  </layer>
- <objectgroup name="Objects" width="19" height="40">
-  <object name="Portal" type="Portal" x="200" y="200" width="200" height="200">
+ <objectgroup name="Objects" width="17" height="40">
+  <object name="Portal" type="Portal" x="150" y="100" width="200" height="200">
    <properties>
     <property name="Color" value="Red"/>
    </properties>
   </object>
-  <object name="Water" type="Generator" x="446" y="400" width="50" height="50">
+  <object name="Water" type="Generator" x="400" y="300" width="50" height="50">
    <properties>
     <property name="Color" value="Water"/>
     <property name="Direction" value="Down"/>
    </properties>
   </object>
-  <object name="Red" type="Generator" x="600" y="100" width="50" height="50">
+  <object name="Red" type="Generator" x="600" y="50" width="50" height="50">
    <properties>
     <property name="Color" value="Red"/>
     <property name="Direction" value="Down"/>
    </properties>
   </object>
-  <object name="Player" type="Player" x="350" y="1700" width="50" height="100"/>
-  <object name="Spikes" type="Spikes" x="250" y="750" width="50" height="100">
+  <object name="Player" type="Player" x="600" y="1700" width="50" height="100"/>
+  <object name="Spikes" type="Spikes" x="250" y="350" width="50" height="100">
+   <properties>
+    <property name="Direction" value="Right"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="250" y="450" width="50" height="100">
    <properties>
     <property name="Direction" value="Right"/>
    </properties>
@@ -35,9 +40,29 @@
     <property name="Direction" value="Right"/>
    </properties>
   </object>
-  <object name="Spikes" type="Spikes" x="250" y="1350" width="50" height="100">
+  <object name="Spikes" type="Spikes" x="250" y="950" width="50" height="100">
    <properties>
     <property name="Direction" value="Right"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="550" y="600" width="50" height="100">
+   <properties>
+    <property name="Direction" value="Left"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="550" y="700" width="50" height="100">
+   <properties>
+    <property name="Direction" value="Left"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="550" y="1100" width="50" height="100">
+   <properties>
+    <property name="Direction" value="Left"/>
+   </properties>
+  </object>
+  <object name="Spikes" type="Spikes" x="550" y="1200" width="50" height="100">
+   <properties>
+    <property name="Direction" value="Left"/>
    </properties>
   </object>
   <object name="Spikes" type="Spikes" x="250" y="1450" width="50" height="100">
@@ -45,34 +70,9 @@
     <property name="Direction" value="Right"/>
    </properties>
   </object>
-  <object name="Spikes" type="Spikes" x="650" y="450" width="50" height="100">
+  <object name="Spikes" type="Spikes" x="250" y="1350" width="50" height="100">
    <properties>
-    <property name="Direction" value="Left"/>
-   </properties>
-  </object>
-  <object name="Spikes" type="Spikes" x="650" y="550" width="50" height="100">
-   <properties>
-    <property name="Direction" value="Left"/>
-   </properties>
-  </object>
-  <object name="Spikes" type="Spikes" x="650" y="1050" width="50" height="100">
-   <properties>
-    <property name="Direction" value="Left"/>
-   </properties>
-  </object>
-  <object name="Spikes" type="Spikes" x="650" y="1150" width="50" height="100">
-   <properties>
-    <property name="Direction" value="Left"/>
-   </properties>
-  </object>
-  <object name="Spikes" type="Spikes" x="650" y="1650" width="50" height="100">
-   <properties>
-    <property name="Direction" value="Left"/>
-   </properties>
-  </object>
-  <object name="Spikes" type="Spikes" x="650" y="1750" width="50" height="100">
-   <properties>
-    <property name="Direction" value="Left"/>
+    <property name="Direction" value="Right"/>
    </properties>
   </object>
  </objectgroup>

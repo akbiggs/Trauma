@@ -96,8 +96,8 @@ namespace Trauma.Helpers
         /// <returns>True if the color is contained, false otherwise.</returns>
         public static bool Contains(this Color color, Color containedColor)
         {
-            // black is contained in every color...also there's this gray color
-            if (containedColor == Black)
+            // black is contained in every color...also there's this gray color thing
+            if (color == Gray || containedColor == Black)
                 return true;
 
             if (color == containedColor) 

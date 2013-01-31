@@ -70,11 +70,11 @@ namespace Trauma.Objects
         {
             switch (type)
             {
-                case RoomType.Acceptance:
-                    return "Acceptance";
                 case RoomType.Anger:
-                case RoomType.Denial:
                     return "Anger";
+                case RoomType.Denial:
+                case RoomType.Acceptance:
+                    return "Denial";
                 case RoomType.Bargain:
                     return "Bargain";
                 case RoomType.Depression:

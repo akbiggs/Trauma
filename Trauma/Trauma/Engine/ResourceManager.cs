@@ -51,6 +51,14 @@ namespace Trauma.Engine
                 "Symbol1_Depression",
                 "Symbol2_Depression",
                 "Symbol4_Depression",
+                "Symbol1_Denial",
+                "Symbol2_Denial",
+                "Symbol3_Denial",
+                "Symbol4_Denial",
+                "Symbol1_Bargain",
+                "Symbol2_Bargain",
+                "Symbol3_Bargain",
+                "Symbol4_Bargain",
                 "Icon"
             };
 
@@ -82,7 +90,8 @@ namespace Trauma.Engine
             }; 
         static readonly List<String> backgroundTexNames = new List<string>
             {
-                "Intro",
+                "Acceptance",
+                "Bargain",
                 "Denial",
                 "Depression",
                 "Anger"

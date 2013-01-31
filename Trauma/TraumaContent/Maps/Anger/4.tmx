@@ -109,5 +109,11 @@
     <property name="Color" value="Purple"/>
    </properties>
   </object>
+  <object name="Generator" type="Generator" x="500" y="1200" width="50" height="50">
+   <properties>
+    <property name="Color" value="Gray"/>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

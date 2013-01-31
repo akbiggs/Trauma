@@ -386,9 +386,9 @@ namespace Trauma.Objects
 
         public override void CollideWithGround(Room room)
         {
-            if (Velocity.Y > 6f && !(Color == Color.Black))
-                room.Splat(facing == LEFT ? new Vector2(Position.X, Position.Y + 160) : new Vector2(Position.X, Position.Y + 160), 
-                    Vector2.One * JUMP_SPLATTER_SIZE*3, color, velocity);
+        //    if (Velocity.Y > 6f && !(Color == Color.Black))
+        //        room.Splat(facing == LEFT ? new Vector2(Position.X, Position.Y + 160) : new Vector2(Position.X, Position.Y + 160), 
+        //            Vector2.One * JUMP_SPLATTER_SIZE*3, color, velocity);
 
             maxSpeed = new Vector2(MAX_SPEED_X, MAX_SPEED_Y);
             velocity.Y = 0;

@@ -34,13 +34,13 @@ namespace Trauma.Engine
                 //"Denial_1",
                 //"Denial_2",
                 //"Denial_3",
-                "Denial_4",
-                "Denial_5",
-                "Denial_6",
+                //"Denial_4",
+                //"Denial_5",
+                //"Denial_6",
                 //"Anger_1",
                 //"Anger_2",
                 //"Anger_3",
-                //"Anger_4",
+                "Acceptance_1",
             };
 
         Intro intro;

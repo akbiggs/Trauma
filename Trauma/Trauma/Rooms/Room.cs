@@ -460,7 +460,9 @@ namespace Trauma.Rooms
             if (Failed)
                 GameEngine.FadeOut(Color.Black, FadeSpeed.Fast);
             else
+            {
                 GameEngine.FadeOut(Color.White, FadeSpeed.Fast);
+            }
             finished = true;
         }
 
@@ -708,12 +710,15 @@ namespace Trauma.Rooms
 
             spriteBatch.End();
 
-            // ...and now do the interface
-            spriteBatch.Begin();
-            if (miniMapIsVisible)
-                miniMap.Draw(spriteBatch);
-            toolbar.Draw(spriteBatch);
-            spriteBatch.End();
+            // ...and now do the interface (unless we're in the last stage of the game
+            if (Type != RoomType.Acceptance)
+            {
+                spriteBatch.Begin();
+                if (miniMapIsVisible)
+                    miniMap.Draw(spriteBatch);
+                toolbar.Draw(spriteBatch);
+                spriteBatch.End();
+            }
         }
 
 
