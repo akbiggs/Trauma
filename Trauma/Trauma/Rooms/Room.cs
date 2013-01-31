@@ -461,7 +461,7 @@ namespace Trauma.Rooms
                 GameEngine.FadeOut(Color.Black, FadeSpeed.Fast);
             else
             {
-                GameEngine.FadeOut(Color.White, FadeSpeed.Fast);
+                GameEngine.FadeOut(Color.White, Type == RoomType.Acceptance ? FadeSpeed.Slow : FadeSpeed.Fast);
             }
             finished = true;
         }
@@ -491,7 +491,8 @@ namespace Trauma.Rooms
             if (!Failed)
             {
                 // Update all objects in the room.
-                player.Update(this, gameTime);
+                if (Type != RoomType.Acceptance || portals.Find((portal) => portal.Symbolizing) == null)
+                    player.Update(this, gameTime);
                 foreach (Portal portal in portals)
                 {
                     portal.Update(this, gameTime);

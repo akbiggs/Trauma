@@ -39,6 +39,8 @@ namespace Trauma.Objects
         public bool IsCorrect;
         public bool Symbolizing = false;
         public bool Unlocked = false;
+
+        RoomType type;
         #endregion
 
         public Portal(RoomType type, Vector2 position, Vector2 size, Color color, bool isCorrect=false) :
@@ -46,6 +48,7 @@ namespace Trauma.Objects
             color, true, size, GetAnimations(type), "Spin1", 0)
         {
             IsCorrect = isCorrect;
+            this.type = type;
         }
 
         private static List<AnimationSet> GetAnimations(RoomType type)
@@ -125,8 +128,15 @@ namespace Trauma.Objects
                 }
                 else
                 {
-                    curSymAnimation = animations.Find((set) => set.IsCalled(SYM + "1"));
-                    Symbolizing = true;
+                    if (type != RoomType.Acceptance)
+                    {
+                        curSymAnimation = animations.Find((set) => set.IsCalled(SYM + "1"));
+                        Symbolizing = true;
+                    }
+                    else
+                    {
+                        Unlocked = true;
+                    }
                 }
             }
             base.CollideWithObject(obj, room, collision);
