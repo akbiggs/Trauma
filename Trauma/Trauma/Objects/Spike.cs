@@ -22,7 +22,8 @@ namespace Trauma.Rooms
             {
                 Facing = Direction.Up;
                 this.Position = new Vector2(position.X, position.Y);
-                this.Box.Position = new Vector2(position.X + size.X / 2, position.Y);
+                this.Box.Position = new Vector2(position.X + size.X / 4, position.Y);
+                this.box = new BBox((int)Box.Position.X - 20, (int)Box.Position.Y, (int)(box.Width * 1.75f), (int)box.Height);
             }
 
             // facing down
@@ -30,7 +31,7 @@ namespace Trauma.Rooms
             {
                 Facing = Direction.Down;
                 this.Position = new Vector2(position.X + size.X, position.Y + size.Y);
-                this.box.Position = new Vector2(position.X, position.Y);
+                this.box = new BBox((int)(Position.X - size.X), (int)(Position.Y - size.Y), (int)box.Width * 2, (int)box.Height);
             }
 
             // facing left
@@ -38,7 +39,7 @@ namespace Trauma.Rooms
             {
                 Facing = Direction.Left;
                 this.Position = new Vector2(position.X, position.Y + size.Y);
-                this.box.Position = new Vector2(position.X, position.Y);
+                this.box = new BBox((int)(Position.X), (int)(Position.Y - size.X), (int)box.Width, (int)box.Height * 2);
             }
 
             // facing right
@@ -46,7 +47,7 @@ namespace Trauma.Rooms
             {
                 Facing = Direction.Right;
                 this.Position = new Vector2(position.X + size.X / 2, position.Y);
-                this.box.Position = new Vector2(position.X, position.Y);
+                this.box = new BBox((int)(Position.X - size.X/2), (int)Position.Y, (int)box.Width, (int)box.Height * 2);
             }
 
             Debug.Assert(Facing != Direction.None, "Didn't handle a spike direction for facing.");

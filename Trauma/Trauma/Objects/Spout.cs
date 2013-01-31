@@ -14,7 +14,7 @@ namespace Trauma.Objects
     {
         const float SPOUT_SPEED = 0f;
         const float SIZE_X = 50;
-        const float SIZE_Y = 225;
+        const float SIZE_Y = 250;
 
         public override Vector2 BoxOffset
         {
@@ -44,7 +44,13 @@ namespace Trauma.Objects
                 new AnimationSet("Disappear", GetTexture(color, isWater), 2, 50, 2, false, 3)
             }, "Appear", direction.ToAngle())
         {
-            this.direction = direction;            
+            this.direction = direction;
+            if (this.direction.Y < 0)
+                this.position.Y -= 225;
+            if (this.direction.Y > 0)
+                this.position.Y += 50;
+            if (this.direction.X > 0)
+                this.position.X += 1000;
         }
 
         private static Texture2D GetTexture(Color color, bool isWater)
@@ -68,12 +74,11 @@ namespace Trauma.Objects
 
             Move(room, Vector2.Zero);
 
-            
             if (direction.X < 0)
-                box = new BBox((int)(Position.X - SIZE_Y / 4 + SIZE_X), (int)(Position.Y - SIZE_X), (int)SIZE_Y, (int)SIZE_X);
-            else if (direction.X > 0)
+                box = new BBox((int)(Position.X - SIZE_Y / 8 + 40), (int)(Position.Y - SIZE_X / 2), (int)SIZE_Y - 40, (int)SIZE_X);
+            if (direction.X > 0)
             {
-                box = new BBox((int)(Center.X - 60), (int)Position.Y, (int)SIZE_Y, (int)SIZE_X);
+                box = new BBox((int)(Position.X - 50), (int)Position.Y, (int)SIZE_Y - 140, (int)SIZE_X);
             }
 
             base.Update(room, gameTime);
@@ -81,9 +86,22 @@ namespace Trauma.Objects
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            Vector2 oldPosition = position;
+            if (this.direction.X > 0)
+                position.X += 250;
+            if (this.direction.Y > 0)
+            {
+                position.X += 50;
+                position.Y += 200;
+            }
+            if (Color == Color.Black)
+                color = Color.White;
             base.Draw(spriteBatch);
+            if (color == Color.White)
+                color = Color.Black;
+            this.position = oldPosition;
 
-            box.Draw(spriteBatch);
+            //box.Draw(spriteBatch);
         }
     }
 }

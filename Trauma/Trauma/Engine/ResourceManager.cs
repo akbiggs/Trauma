@@ -59,7 +59,7 @@ namespace Trauma.Engine
                 "1",
                 "2",
                 "3",
-                "4"
+                "4",
             };
         static readonly List<String> blobTexNames = new List<String>
             {
@@ -94,7 +94,8 @@ namespace Trauma.Engine
                 "Navigation",
                 "Toolbar",
                 "Spikes",
-                "Barrier"
+                "Barrier",
+                "Reset"
             };
 
         /* Maps each path to a list of textures. */
@@ -217,6 +218,7 @@ namespace Trauma.Engine
         public static void PlaySong(String name)
         {
             MediaPlayer.Play(soundDic[name]);
+            MediaPlayer.IsRepeating = true;
         }
 
         public static void Stop()

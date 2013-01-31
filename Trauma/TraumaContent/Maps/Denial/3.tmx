@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="30" height="28" tilewidth="50" tileheight="50">
+<map version="1.0" orientation="orthogonal" width="30" height="25" tilewidth="50" tileheight="50">
  <tileset firstgid="1" source="tiles3.tsx"/>
- <layer name="Tiles" width="30" height="28">
+ <layer name="Tiles" width="30" height="25">
   <data encoding="base64" compression="zlib">
-   eJztlWkKAjEMhXMF930Xxl1H0Qu4/BHF+5/G90cIlWZqp9ERDXyEEIbHS9MOEVEJlEk/KqDK6hZogwWYW7LUc80d0GW6AzAMb+8pIjBi9RTM3qC7BCtW/5rfV3SPCRyEb02/Ied8Enpp/IbU1dyrGKzBhrKzV/97pBOa90iKtH4fO7oFO6O3J/uboun3DC4WNM/3KvRc/Eqz9NXNsl8NXRe/Sf87GzdB91vvr2986n2OjLoAiqAH+oo5B/JMtwGaYAwmirkG6n6jChZ3nX4qGg==
+   eJzdlGkKwjAQhXMF933f16qgF1D/ev/j+AQDYYiTaiZJceBj0gfp46XTKJW2aqAu+L45mBGtAZpE64E+2IMd6TbN1fXa1AdgSHw3YOuV0F0LsCTaBEwD+2bgQLQYeW2+efPeGW6OvbZzls57BCei+eT1qRh5zdLZU83Vv/1HV8XPu0Te1zc7g4uhPRx7Qs3VL75cXls2Kd8i5g3py+XlZpSDVqp7skj3VSxfmrcCqmAExu/+af1NN9clUCa+HdA1nldgLdR1tUA759mEqie6uiPi
   </data>
  </layer>
- <objectgroup name="Objects" width="30" height="28">
-  <object name="Yellow" type="Generator" x="900" y="300" width="50" height="50">
+ <objectgroup name="Objects" width="30" height="25">
+  <object name="Yellow" type="Generator" x="850" y="300" width="50" height="50">
    <properties>
     <property name="Color" value="Yellow"/>
     <property name="Direction" value="Down"/>
@@ -19,28 +19,22 @@
     <property name="Direction" value="Down"/>
    </properties>
   </object>
-  <object name="Red" type="Generator" x="1100" y="800" width="50" height="50">
+  <object name="Red" type="Generator" x="1050" y="600" width="50" height="50">
    <properties>
     <property name="Color" value="Red"/>
     <property name="Direction" value="Down"/>
    </properties>
   </object>
-  <object name="Player" type="Player" x="1250" y="1100" width="50" height="100"/>
-  <object name="Blue" type="Generator" x="950" y="50" width="50" height="50">
+  <object name="Player" type="Player" x="1250" y="950" width="50" height="100"/>
+  <object name="Blue" type="Generator" x="900" y="100" width="50" height="50">
    <properties>
     <property name="Color" value="Blue"/>
     <property name="Direction" value="Down"/>
    </properties>
   </object>
-  <object name="Purple Portal" type="Portal" x="1100" y="550" width="200" height="200">
+  <object name="Purple Portal" type="Portal" x="1050" y="400" width="200" height="200">
    <properties>
     <property name="Color" value="Purple"/>
-   </properties>
-  </object>
-  <object name="Black" type="Generator" x="1250" y="50" width="50" height="50">
-   <properties>
-    <property name="Color" value="Black"/>
-    <property name="Direction" value="Down"/>
    </properties>
   </object>
  </objectgroup>

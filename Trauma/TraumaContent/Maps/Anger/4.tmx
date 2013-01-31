@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="40" height="40" tilewidth="50" tileheight="50">
+ <tileset firstgid="1" source="tiles3.tsx"/>
+ <layer name="Tiles" width="40" height="40">
+  <data encoding="base64" compression="zlib">
+   eJzt0McKAlEMRuGx97rTnb338v6P5lm6EDHEyaD8Bz6yuVxCkkQp9Wk55DHCOGAWUDTsV0MdK6wDZgNNw34LLA3vvU0wNbw/4JjSLq/aYGt4/2v3O+GMC65fmDfcn/7/9/ulne7nS/fzpfv50v186X6+dD9f1vtVUMUM84BZQtmwXwdd7LAPmC20DftF10M/6yXeNMAw6yWUUkqp4B4UwiEE
+  </data>
+ </layer>
+ <objectgroup name="Objects" width="40" height="40">
+  <object name="Player" type="Player" x="700" y="1150" width="50" height="100"/>
+  <object name="Spout" type="Spout" x="250" y="1100" width="50" height="50">
+   <properties>
+    <property name="Color" value="Water"/>
+    <property name="Direction" value="Right"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Spout" x="250" y="1000" width="50" height="50">
+   <properties>
+    <property name="Color" value="Water"/>
+    <property name="Direction" value="Right"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Spout" x="250" y="900" width="50" height="50">
+   <properties>
+    <property name="Color" value="Water"/>
+    <property name="Direction" value="Right"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Spout" x="250" y="800" width="50" height="50">
+   <properties>
+    <property name="Color" value="Water"/>
+    <property name="Direction" value="Right"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Spout" x="850" y="1250" width="50" height="50">
+   <properties>
+    <property name="Color" value="Red"/>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Spout" x="1650" y="1150" width="50" height="50">
+   <properties>
+    <property name="Color" value="Blue"/>
+    <property name="Direction" value="Left"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Spout" x="1650" y="1000" width="50" height="50">
+   <properties>
+    <property name="Color" value="Blue"/>
+    <property name="Direction" value="Left"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Spout" x="1650" y="850" width="50" height="50">
+   <properties>
+    <property name="Color" value="Blue"/>
+    <property name="Direction" value="Left"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Spout" x="1650" y="700" width="50" height="50">
+   <properties>
+    <property name="Color" value="Blue"/>
+    <property name="Direction" value="Left"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Spout" x="850" y="300" width="50" height="50">
+   <properties>
+    <property name="Color" value="Black"/>
+    <property name="Direction" value="Down"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Spout" x="950" y="300" width="50" height="50">
+   <properties>
+    <property name="Color" value="Black"/>
+    <property name="Direction" value="Down"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Spout" x="1050" y="300" width="50" height="50">
+   <properties>
+    <property name="Color" value="Black"/>
+    <property name="Direction" value="Down"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Spout" x="1150" y="300" width="50" height="50">
+   <properties>
+    <property name="Color" value="Black"/>
+    <property name="Direction" value="Down"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Spout" x="950" y="1250" width="50" height="50">
+   <properties>
+    <property name="Color" value="Red"/>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Spout" x="1050" y="1250" width="50" height="50">
+   <properties>
+    <property name="Color" value="Red"/>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Spout" type="Spout" x="1150" y="1250" width="50" height="50">
+   <properties>
+    <property name="Color" value="Red"/>
+    <property name="Direction" value="Up"/>
+   </properties>
+  </object>
+  <object name="Portal" type="Portal" x="400" y="300" width="150" height="150">
+   <properties>
+    <property name="Color" value="Purple"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

@@ -96,7 +96,7 @@ namespace Trauma.Engine
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(ResourceManager.GetTexture("Misc_Pixel"), Rectangle, new Color(255, 0, 0, 125));
+            spriteBatch.Draw(ResourceManager.GetTexture("Misc_Pixel"), Rectangle, new Color(255, 0, 0, 50));
         }
 
         public Vector2 Center 

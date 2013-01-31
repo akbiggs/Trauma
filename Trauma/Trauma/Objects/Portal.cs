@@ -135,13 +135,13 @@ namespace Trauma.Objects
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(curAnimation.GetTexture(),
-                new Rectangle((int)Position.X, (int)Position.Y - 50, (int)(size.X * 1.5), (int)(size.Y * 1.5)),
+                new Rectangle((int)Position.X - 50, (int)Position.Y - 50, (int)(size.X * 1.5), (int)(size.Y * 1.5)),
                 curAnimation.GetFrameRect(), color, 0, Vector2.Zero, SpriteEffects.None, 0);
 
             if (Symbolizing)
             {
                 spriteBatch.Draw(curSymAnimation.GetTexture(),
-                    new Rectangle((int)Center.X - 10, (int)Center.Y - 40, (int)(size.X / 2), (int)(size.Y / 2)),
+                    new Rectangle((int)Center.X - 60, (int)Center.Y - 40, (int)(size.X / 2), (int)(size.Y / 2)),
                     curSymAnimation.GetFrameRect(), Color.White, rotation, Vector2.Zero, SpriteEffects.None, 0);
             }
         }

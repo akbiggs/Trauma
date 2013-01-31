@@ -3,7 +3,7 @@
  <tileset firstgid="1" source="tiles3.tsx"/>
  <layer name="Tiles" width="20" height="28">
   <data encoding="base64" compression="zlib">
-   eJztlNcKgjEMheO4cdy4957gni+gXjne/3E80Abi+GulFQQ98JHQlnKSQHJElAc90HeIBVAENVAHEzB1iA3QJKUuuWsAhjofe/hvBuY6/0Z/8j8f/mS90t9e5AuwBCuwBhdxFwJh0NKkQBpkQFafRUDU4OEgiIG4uCuBMqiAqj5LgKRNcXTbryCNSNW+I1X3BmwD3sp+BalDajZncPLoz0bv+HsmnjX3wpe/I6l+uPq713++j/rV+fIO8TVf3/5sZOOPd2ub1H41Rd7HJsnd+kq8jz+tK3BIHyA=
+   eJzt1FkKwjAQxvFcwd267wqudbuA9qna+x/HP0ioD8JM6IggDvzISxi+ZNI697mqoY4ZpsLaQFPo10UPG6yFtY+B0G+JlfIsW+yEPWNMlP3mWBj20+QLOW9Ivhh7HHDECWdkxvmSF9b3p+nn811wdfk531XIe7njZphPU0Xfs5+5vwurfKl73sc3vrf/fPP65fn6f4jVfK3zaUqTr4IqRhgKawlloV8bHWW+CC3l3iL1ANZOHUg=
   </data>
  </layer>
  <objectgroup name="Objects" width="20" height="28">
@@ -12,13 +12,13 @@
     <property name="Direction" value="Down"/>
    </properties>
   </object>
-  <object name="Player" type="Player" x="550" y="1150" width="50" height="100"/>
-  <object name="Portal" type="Portal" x="700" y="150" width="200" height="200">
+  <object name="Player" type="Player" x="550" y="1100" width="50" height="100"/>
+  <object name="Portal" type="Portal" x="250" y="150" width="200" height="200">
    <properties>
     <property name="Color" value="Purple"/>
    </properties>
   </object>
-  <object name="Yellow" type="Generator" x="450" y="400" width="50" height="50">
+  <object name="Yellow" type="Generator" x="450" y="350" width="50" height="50">
    <properties>
     <property name="Color" value="Yellow"/>
     <property name="Direction" value="Down"/>
@@ -27,17 +27,6 @@
   <object name="Spikes" type="Spikes" x="600" y="350" width="100" height="50">
    <properties>
     <property name="Direction" value="Up"/>
-   </properties>
-  </object>
-  <object name="Spikes" type="Spikes" x="100" y="350" width="100" height="50">
-   <properties>
-    <property name="Direction" value="Up"/>
-   </properties>
-  </object>
-  <object name="Red" type="Generator" x="150" y="100" width="50" height="50">
-   <properties>
-    <property name="Color" value="Red"/>
-    <property name="Direction" value="Down"/>
    </properties>
   </object>
   <object name="Blue" type="Generator" x="600" y="100" width="50" height="50">
@@ -56,8 +45,9 @@
     <property name="Direction" value="Down"/>
    </properties>
   </object>
-  <object name="Spikes" type="Spikes" x="600" y="1050" width="100" height="50">
+  <object name="Red" type="Generator" x="650" y="1000" width="50" height="50">
    <properties>
+    <property name="Color" value="Red"/>
     <property name="Direction" value="Down"/>
    </properties>
   </object>

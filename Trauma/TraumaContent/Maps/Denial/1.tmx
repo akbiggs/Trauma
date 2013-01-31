@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="37" height="31" tilewidth="50" tileheight="50">
+<map version="1.0" orientation="orthogonal" width="32" height="26" tilewidth="50" tileheight="50">
  <tileset firstgid="1" source="tiles3.tsx"/>
- <layer name="Tiles" width="37" height="31">
+ <layer name="Tiles" width="32" height="26">
   <data encoding="base64" compression="zlib">
-   eJztlUkKwkAQRVtBQUHBeZ6HCM7jDbz/lfyb2hRi+sd00w4fHp1FLSqvOilj3KUBmkR9C7Qd9SIZgCHYgp3FOQJjxz3NwJyoj8DKUS+SNdgQ9XtwcNSLJERPbE8+PLGz83mfjuAEzuACruD2pF48yT9kAZYpnfKcA3niHcQT+w+xOeW5BMpET+KJvYdpRmYqsxRP7D10mRA86YTgSc/u78kuPj1lQBZMwPTFWQFV48dTARQt6jqga/x4YndrEk/6e9G5K9jd+i2e2PjwFDc7nV/1xMaFJ3ZWOiF6YnvycZ/Y2dVA3cTvondO2WO26YE+UZ8kssc+OQ97qiUD
+   eJzllIkKwjAQRKOgoKDgfd/WClpv/f9Pc0QCYQnJRpJq68BjSRlYJtmuEPlRB3QZvh7oB+g/AVOQgIOhzsA8QP8VWDN8R3AK0H8H9gxfDLZf7E/zy7nZgEipkeabziPPJVBm9Kf55dzQWbHNUUJ8NVAHV3ADd/Bg5Ofemy/R/ty59SV6/2nkP4OLeL/JP+ZXFTp/ARTBAiw1tQGait9H/tf7yv+tAqoG7wAMlbPv/K77/ZP8al4q1/2exfwmpZHfdP95zG/KS5W1/C3QFvpdRSvHQ/ebTSMwdvDbRPfbL+sJgt8b5g==
   </data>
  </layer>
- <objectgroup name="Objects" width="37" height="31">
-  <object name="Purple Portal" type="Portal" x="1250" y="100" width="250" height="250">
+ <objectgroup name="Objects" width="32" height="26">
+  <object name="Purple Portal" type="Portal" x="1050" y="150" width="200" height="200">
    <properties>
     <property name="Color" value="Purple"/>
    </properties>
   </object>
-  <object name="Purple" type="Generator" x="1100" y="500" width="50" height="50">
+  <object name="Purple" type="Generator" x="900" y="350" width="50" height="50">
    <properties>
     <property name="Color" value="Purple"/>
     <property name="Direction" value="Down"/>
    </properties>
   </object>
-  <object name="Player" type="Player" x="250" y="1300" width="50" height="100"/>
+  <object name="Player" type="Player" x="300" y="1000" width="50" height="100"/>
  </objectgroup>
 </map>

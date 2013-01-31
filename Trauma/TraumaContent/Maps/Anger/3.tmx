@@ -48,38 +48,37 @@
     <property name="Direction" value="Up"/>
    </properties>
   </object>
-  <object name="Yellow Spout" type="Spout" x="800" y="1650" width="50" height="50">
+  <object name="Yellow Spout" type="Spout" x="800" y="1700" width="50" height="50">
    <properties>
     <property name="Color" value="Yellow"/>
     <property name="Direction" value="Up"/>
    </properties>
   </object>
-  <object name="Spout" type="Generator" x="300" y="400" width="50" height="50">
+  <object name="Spout" type="Spout" x="400" y="400" width="50" height="50">
    <properties>
     <property name="Color" value="Blue"/>
     <property name="Direction" value="Right"/>
     <property name="Speed" value="Fast"/>
    </properties>
   </object>
-  <object name="Spout" type="Generator" x="700" y="650" width="50" height="50">
+  <object name="Spout" type="Spout" x="700" y="650" width="50" height="50">
    <properties>
     <property name="Color" value="Blue"/>
     <property name="Direction" value="Left"/>
     <property name="Speed" value="Fast"/>
    </properties>
   </object>
-  <object name="Spout" type="Generator" x="700" y="1150" width="50" height="50">
+  <object name="Spout" type="Spout" x="700" y="1150" width="50" height="50">
    <properties>
     <property name="Color" value="Blue"/>
     <property name="Direction" value="Left"/>
     <property name="Speed" value="Fast"/>
    </properties>
   </object>
-  <object name="Spout" type="Generator" x="300" y="900" width="50" height="50">
+  <object name="Spout" type="Spout" x="400" y="900" width="50" height="50">
    <properties>
     <property name="Color" value="Blue"/>
     <property name="Direction" value="Right"/>
-    <property name="Speed" value="Fast"/>
    </properties>
   </object>
   <object name="Spikes" type="Spikes" x="1050" y="850" width="50" height="100">

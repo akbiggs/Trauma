@@ -154,7 +154,7 @@ namespace Trauma.Rooms
 
         private bool firstDraw = true;
         private bool failed;
-        private bool miniMapIsVisible = true;
+        private bool miniMapIsVisible;
         private const string SPIKE_OBJECT_NAME = "Spikes";
         private const string WAVE_OBJECT_NAME = "Wave";
 
@@ -185,6 +185,7 @@ namespace Trauma.Rooms
             Gravity = gravity;
             this.map = map;
             Type = type;
+            miniMapIsVisible = GameEngine.ShouldShowMinimap;
 
             width = map.WidthInPixels();
             height = map.HeightInPixels();
@@ -438,7 +439,7 @@ namespace Trauma.Rooms
                 new Vector2(TOOLBAR_ICONSIZE_X, TOOLBAR_ICONSIZE_Y), new List<Texture2D>
                     {
                         ResourceManager.GetTexture("Misc_Navigation"),
-                        ResourceManager.GetTexture("Misc_UndoIcon")
+                        ResourceManager.GetTexture("Misc_Reset")
                     }, Orientation.Vertical);
             GameEngine.FadeIn(FadeSpeed.Fast);
         }
@@ -573,7 +574,10 @@ namespace Trauma.Rooms
                 toolbar.Update(gameTime);
 
                 if (toolbar.IsSelected(NAVIGATION))
+                {
                     miniMapIsVisible = !miniMapIsVisible;
+                    GameEngine.ShouldShowMinimap = miniMapIsVisible;
+                }
                 if (toolbar.IsSelected(UNDO))
                 {
                     player.Die(this);
@@ -810,7 +814,7 @@ namespace Trauma.Rooms
         /// <param name="position">The position of the object.</param>
         /// <param name="size">The size of the object.</param>
         /// <returns>Vector2.</returns>
-        public virtual Vector2 GetMinPosition(Vector2 position, Vector2 size, Color color)
+        public virtual Vector2 GetMinPosition(Vector2 position, Vector2 size, Color color, bool collidable=true)
         {
             Vector2 tilespan = GetTilespan(position, size);
 
@@ -819,40 +823,46 @@ namespace Trauma.Rooms
             bool done;
             // calculate x-bound
             float boundX = 15;
-            done = false;
-            for (var x = (int) curTileIndex.X; x >= 0; x--)
+            if (collidable)
             {
-                for (var y = (int) curTileIndex.Y; y <= curTileIndex.Y + tilespan.Y; y++)
-                    if (tiles[y, x].Type == TileType.Solid && !(tiles[y, x].Color != Color.White && tiles[y, x].Color == color))
-                    {
-                        boundX = x*tilesize.X + tilesize.X + Epsilon;
-                        done = true;
+                done = false;
+                for (var x = (int)curTileIndex.X; x >= 0; x--)
+                {
+                    for (var y = (int)curTileIndex.Y; y <= curTileIndex.Y + tilespan.Y; y++)
+                        if (tiles[y, x].Type == TileType.Solid && !(tiles[y, x].Color != Color.White && tiles[y, x].Color == color))
+                        {
+                            boundX = x * tilesize.X + tilesize.X + Epsilon;
+                            done = true;
+                            break;
+                        }
+                    if (done)
                         break;
-                    }
-                if (done)
-                    break;
+                }
             }
 
             // calculate y-bound
             float boundY = 15;
-            done = false;
-            for (var y = (int) curTileIndex.Y; y >= 0; y--)
+            if (collidable)
             {
-                for (var x = (int) curTileIndex.X; x <= curTileIndex.X + tilespan.X; x++)
-                    if (tiles[y, x].Type == TileType.Solid && !(tiles[y, x].Color != Color.White && tiles[y, x].Color == color))
-                    {
-                        boundY = y*tilesize.Y + tilesize.Y + Epsilon;
-                        done = true;
+                done = false;
+                for (var y = (int)curTileIndex.Y; y >= 0; y--)
+                {
+                    for (var x = (int)curTileIndex.X; x <= curTileIndex.X + tilespan.X; x++)
+                        if (tiles[y, x].Type == TileType.Solid && !(tiles[y, x].Color != Color.White && tiles[y, x].Color == color))
+                        {
+                            boundY = y * tilesize.Y + tilesize.Y + Epsilon;
+                            done = true;
+                            break;
+                        }
+                    if (done)
                         break;
-                    }
-                if (done)
-                    break;
+                }
             }
 
             return new Vector2(boundX, boundY);
         }
 
-        public virtual Vector2 GetMaxPosition(Vector2 position, Vector2 size, Color color)
+        public virtual Vector2 GetMaxPosition(Vector2 position, Vector2 size, Color color, bool collidable=true)
         {
             Vector2 tilespan = GetTilespan(position, size);
             
@@ -861,37 +871,41 @@ namespace Trauma.Rooms
 
             // calculate x-bound
             float boundX = StageBounds.X - size.X - 10;
-            done = false;
-            for (var x = (int) curTileIndex.X; x < map.Width; x++)
+            if (collidable)
             {
-                for (var y = (int) curTileIndex.Y; y <= curTileIndex.Y + tilespan.Y; y++)
-                    if (tiles[y, x].Type == TileType.Solid && !(tiles[y, x].Color != Color.White && tiles[y, x].Color == color))
-                    {
-                        boundX = x*tilesize.X - size.X - Epsilon;
-                        done = true;
+                done = false;
+                for (var x = (int)curTileIndex.X; x < map.Width; x++)
+                {
+                    for (var y = (int)curTileIndex.Y; y <= curTileIndex.Y + tilespan.Y; y++)
+                        if (tiles[y, x].Type == TileType.Solid && !(tiles[y, x].Color != Color.White && tiles[y, x].Color == color))
+                        {
+                            boundX = x * tilesize.X - size.X - Epsilon;
+                            done = true;
+                            break;
+                        }
+                    if (done)
                         break;
-                    }
-                if (done)
-                    break;
+                }
             }
 
             // calculate y-bound
             float boundY = StageBounds.Y - size.Y - 10;
             done = false;
-            for (var y = (int) curTileIndex.Y; y < map.Height; y++)
-            {
-                for (var x = (int) curTileIndex.X; x <= curTileIndex.X + tilespan.X; x++)
-                    if ((tiles[y, x].Type == TileType.Solid || 
-                        (tiles[y, x].Type == TileType.TopSolid && Math.Abs(y - curTileIndex.Y) > tilespan.Y))
-                        && !(tiles[y, x].Color != Color.White && tiles[y, x].Color == color))
-                    {
-                        boundY = y*tilesize.Y - size.Y - Epsilon;
-                        done = true;
+            if (collidable)
+                for (var y = (int) curTileIndex.Y; y < map.Height; y++)
+                {
+                    for (var x = (int) curTileIndex.X; x <= curTileIndex.X + tilespan.X; x++)
+                        if ((tiles[y, x].Type == TileType.Solid || 
+                            (tiles[y, x].Type == TileType.TopSolid && Math.Abs(y - curTileIndex.Y) > tilespan.Y))
+                            && !(tiles[y, x].Color != Color.White && tiles[y, x].Color == color))
+                        {
+                            boundY = y*tilesize.Y - size.Y - Epsilon;
+                            done = true;
+                            break;
+                        }
+                    if (done)
                         break;
-                    }
-                if (done)
-                    break;
-            }
+                }
 
             return new Vector2(boundX, boundY);
         }

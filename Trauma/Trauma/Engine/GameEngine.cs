@@ -19,6 +19,7 @@ namespace Trauma.Engine
 
         public static GraphicsDeviceManager graphics;
         public static SpriteBatch spriteBatch;
+        public static bool ShouldShowMinimap = true;
 
         public static float ScreenWidth
         {
@@ -30,8 +31,16 @@ namespace Trauma.Engine
         /// </summary>
         List<String> roomNames = new List<String>
             {
-                "Denial_1",
-                "Anger_3",
+                //"Denial_1",
+                //"Denial_2",
+                //"Denial_3",
+                "Denial_4",
+                "Denial_5",
+                "Denial_6",
+                //"Anger_1",
+                //"Anger_2",
+                //"Anger_3",
+                //"Anger_4",
             };
 
         Intro intro;
@@ -178,7 +187,6 @@ namespace Trauma.Engine
                         ResourceManager.Stop();
                         curRoom.ShouldPlayMusic = true;
                     }
-
                     controller = curRoom;
                     break;
                 case GameState.GameMenu:
@@ -322,7 +330,7 @@ namespace Trauma.Engine
         }
 
         public static String GetTypeName(RoomType type)
-        {
+        {   
             switch (type)
             {
                 case RoomType.Acceptance:

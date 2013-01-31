@@ -184,7 +184,7 @@ namespace Trauma.Objects
             if (direction != Vector2.Zero)
                 direction.Normalize();
 
-            ApplyGravity(room);
+            if (!(this is Spout)) ApplyGravity(room);
             Accelerate(direction);
 
             // TODO: Figure out a way to resolve collisions and do only one function call.
@@ -269,10 +269,10 @@ namespace Trauma.Objects
             velocity = velocity.PushBack(deceleration);
         }
 
-        private void UpdateBounds(Room room)
+        private void UpdateBounds(Room room, bool collidable=true)
         {
-            minPosition = room.GetMinPosition(box.Position, box.Size, color);
-            maxPosition = room.GetMaxPosition(box.Position, box.Size, color);
+            minPosition = room.GetMinPosition(box.Position, box.Size, color, collidable);
+            maxPosition = room.GetMaxPosition(box.Position, box.Size, color, collidable);
         }
 
         private void ChangeXPosition(Room room)
