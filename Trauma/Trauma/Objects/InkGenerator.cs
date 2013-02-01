@@ -58,7 +58,7 @@ namespace Trauma.Objects
                     },
                 DRIP, blobDirection.Negate().ToAngle())
         {
-            reloadTimer = 0;
+            reloadTimer = interval;
             this.interval = interval;
 
             this.blobDirection = blobDirection;
@@ -68,9 +68,12 @@ namespace Trauma.Objects
 
         public override void Update(Room room, GameTime gameTime)
         {
-            if (++reloadTimer == 20000) reloadTimer = 0;
+            reloadTimer++;
             if (CanGenerate(room))
+            {
                 room.Add(Generate());
+                reloadTimer = 0;
+            }
             base.Update(room, gameTime);
         }
 
@@ -103,7 +106,7 @@ namespace Trauma.Objects
         protected virtual bool CanGenerate(Room room)
         {
             Debug.Assert(room.CanHaveMoreBlobs(), "Uh oh, we're getting too many blobs. (is garbage collection working?)");
-            return reloadTimer%interval == 0;
+            return reloadTimer >= interval;
         }
     }
 }

@@ -71,7 +71,7 @@ namespace Trauma.Rooms
         private const int TOOLBAR_ICONSIZE_Y = 50;
 
         // where the minimap should be located (in screen coordinates)
-        private const int MINIMAP_X_OFFSET = 200 + TOOLBAR_X_OFFSET + PADDING;
+        private const int MINIMAP_X_OFFSET = 125 + TOOLBAR_X_OFFSET + PADDING;
         private const int MINIMAP_Y_OFFSET = TOOLBAR_Y_OFFSET;
 
         // toolbar indices
@@ -491,7 +491,7 @@ namespace Trauma.Rooms
             if (!Failed)
             {
                 // Update all objects in the room.
-                if (Type != RoomType.Acceptance || portals.Find((portal) => portal.Symbolizing) == null)
+                if (portals.Find((portal) => portal.Symbolizing) == null)
                     player.Update(this, gameTime);
                 foreach (Portal portal in portals)
                 {

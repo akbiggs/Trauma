@@ -56,6 +56,7 @@ namespace Trauma.Objects
         private bool hasMoved;
         protected bool hasCollidedWithWall;
         protected bool hasCollidedWithCeiling = false;
+        protected bool hasCollidedWithGround = false;
         private Vector2 maxPosition;
         private Vector2 minPosition;
         protected Vector2 position;
@@ -166,6 +167,7 @@ namespace Trauma.Objects
         public virtual void Update(Room room, GameTime gameTime)
         {
             hasCollidedWithWall = false;
+            hasCollidedWithGround = false;
             if (velocity.Y > 0 && hasCollidedWithCeiling)
             {
                 hasCollidedWithCeiling = false;
@@ -309,6 +311,7 @@ namespace Trauma.Objects
 
             if (shouldCollideWithGround)
             {
+                hasCollidedWithGround = true;
                 CollideWithWall(room);
                 CollideWithGround(room);
             }

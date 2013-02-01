@@ -50,6 +50,7 @@ namespace Trauma.Engine
                 "Symbol4_Anger",
                 "Symbol1_Depression",
                 "Symbol2_Depression",
+                "Symbol3_Depression",
                 "Symbol4_Depression",
                 "Symbol1_Denial",
                 "Symbol2_Denial",
@@ -104,7 +105,8 @@ namespace Trauma.Engine
                 "Toolbar",
                 "Spikes",
                 "Barrier",
-                "Reset"
+                "Reset",
+                "Credits"
             };
 
         /* Maps each path to a list of textures. */

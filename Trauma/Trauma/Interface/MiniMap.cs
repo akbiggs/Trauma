@@ -13,8 +13,8 @@ namespace Trauma.Interface
     class MiniMap
     {
         #region Constants
-        private const float SCALE_X_FACTOR = 0.10f;
-        private const float SCALE_Y_FACTOR = 0.10f;
+        private const float SCALE_X_FACTOR = 0.05f;
+        private const float SCALE_Y_FACTOR = 0.05f;
 
         #endregion
 

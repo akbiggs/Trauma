@@ -18,6 +18,8 @@ namespace Trauma.Objects
         float maxHeight;
         float maxHeightPos;
 
+        Vector2 lastPosition;
+
         public override bool IsCollidable
         {
             get { return Math.Abs(curAnimation.CurFrameNumber - 3) == 1; }
@@ -47,14 +49,20 @@ namespace Trauma.Objects
 
         public override void Update(Room room, GameTime gameTime)
         {
+            lastPosition = Position;
             base.Update(room, gameTime);
             //Position = new Vector2(Position.X, maxHeightPos + (maxHeight - size.Y));
-            if ((Velocity.Y > 1 || Velocity.X == 0) && !curAnimation.IsCalled("Disappear"))
+            Move(room, Velocity);
+            if ((Velocity.Y > 1 || Math.Abs(Vector2.Distance(lastPosition, Position)) < Math.Abs(Velocity.X / 2)) && !curAnimation.IsCalled("Disappear"))
                  ChangeAnimation("Disappear");
             if (curAnimation.IsCalled("Disappear") && curAnimation.IsDonePlaying())
                 room.Remove(this);
 
-            Move(room, Velocity);            
+        }
+
+        public override void CollideWithWall(Room room)
+        {
+            base.CollideWithWall(room);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

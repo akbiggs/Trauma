@@ -31,15 +31,18 @@ namespace Trauma.Engine
         /// </summary>
         List<String> roomNames = new List<String>
             {
-                //"Denial_1",
-                //"Denial_2",
-                //"Denial_3",
-                //"Denial_4",
-                //"Denial_5",
-                //"Denial_6",
-                //"Anger_1",
-                //"Anger_2",
-                //"Anger_3",
+                "Denial_1",
+                "Denial_2",
+                "Denial_3",
+                "Denial_4",
+                "Denial_5",
+                "Denial_6",
+                "Anger_1",
+                "Anger_2",
+                "Anger_3",
+                "Bargain_1",
+                "Depression_1",
+                "Depression_2",
                 "Acceptance_1",
             };
 

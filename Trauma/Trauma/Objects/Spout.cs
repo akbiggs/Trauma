@@ -39,9 +39,9 @@ namespace Trauma.Objects
             : base(position, direction * SPOUT_SPEED, SPOUT_SPEED * Vector2.One, Vector2.Zero,
             Vector2.Zero, color, true, new Vector2(SIZE_X, SIZE_Y), new List<AnimationSet>() 
             {
-                new AnimationSet("Appear", GetTexture(color, isWater), 2, 50, 2, false),
-                new AnimationSet("Main", GetTexture(color, isWater), 1, 50, 2, false, 2),
-                new AnimationSet("Disappear", GetTexture(color, isWater), 2, 50, 2, false, 3)
+                new AnimationSet("Appear", GetTexture(color, isWater), 2, 50, 3, false),
+                new AnimationSet("Main", GetTexture(color, isWater), 1, 50, 3, false, 2),
+                new AnimationSet("Disappear", GetTexture(color, isWater), 2, 50, 3, false, 3)
             }, "Appear", direction.ToAngle())
         {
             this.direction = direction;

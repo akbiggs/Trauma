@@ -30,8 +30,6 @@
     <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.VideoImporters, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Maps\Bargain\" />
-    <Folder Include="Maps\Depression\" />
     <Folder Include="Maps\Intro\" />
     <Folder Include="Sounds\Effect\" />
     <Folder Include="Textures\Tileset\" />
@@ -269,27 +267,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Textures\Portal\Symbol1_Depression.png">
-      <Name>Symbol1_Depression</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Textures\Portal\Symbol2_Depression.png">
-      <Name>Symbol2_Depression</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Textures\Portal\Symbol4_Depression.png">
-      <Name>Symbol4_Depression</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Textures\Portal\Symbol1_Anger.png">
       <Name>Symbol1_Anger</Name>
       <Importer>TextureImporter</Importer>
@@ -459,13 +436,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Textures\Portal\Symbol3_Depression.png">
-      <Name>Symbol3_Depression</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Textures\Portal\Symbol1_Bargain.png">
       <Name>Symbol1_Bargain</Name>
       <Importer>TextureImporter</Importer>
@@ -505,6 +475,56 @@
   <ItemGroup>
     <Compile Include="Textures\Portal\Symbol3_Bargain.png">
       <Name>Symbol3_Bargain</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Misc\Credits.png">
+      <Name>Credits</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Maps\Depression\1.tmx">
+      <Name>1</Name>
+      <Importer>TmxImporter</Importer>
+      <Processor>TmxProcessor</Processor>
+    </Compile>
+    <Compile Include="Maps\Depression\2.tmx">
+      <Name>2</Name>
+      <Importer>TmxImporter</Importer>
+      <Processor>TmxProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Portal\Symbol1_Depression.png">
+      <Name>Symbol1_Depression</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Portal\Symbol2_Depression.png">
+      <Name>Symbol2_Depression</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Portal\Symbol4_Depression.png">
+      <Name>Symbol4_Depression</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Maps\Bargain\1.tmx">
+      <Name>1</Name>
+      <Importer>TmxImporter</Importer>
+      <Processor>TmxProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Portal\Symbol3_Depression.png">
+      <Name>Symbol3_Depression</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

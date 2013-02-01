@@ -45,7 +45,7 @@
     <property name="Direction" value="Down"/>
    </properties>
   </object>
-  <object name="Red" type="Generator" x="650" y="1000" width="50" height="50">
+  <object name="Red" type="Generator" x="600" y="1000" width="50" height="50">
    <properties>
     <property name="Color" value="Red"/>
     <property name="Direction" value="Down"/>

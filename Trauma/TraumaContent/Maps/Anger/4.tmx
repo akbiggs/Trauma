@@ -115,5 +115,11 @@
     <property name="Direction" value="Up"/>
    </properties>
   </object>
+  <object name="Wave" type="Wave" x="400" y="1050" width="200" height="200">
+   <properties>
+    <property name="Color" value="Red"/>
+    <property name="Direction" value="Right"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>
